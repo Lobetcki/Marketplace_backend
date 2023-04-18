@@ -16,7 +16,6 @@ import javax.transaction.Transactional;
 public class ServiceUsers {
 
     private final RepositoryUsers repositoryUsers;
-    private UsersMapper userMapper;
 
     public ServiceUsers(RepositoryUsers repositoryUsers) {
         this.repositoryUsers = repositoryUsers;
@@ -47,8 +46,9 @@ public class ServiceUsers {
     // Получить информацию об авторизованном пользователе
     public UserDTO getUser(Authentication authentication) {
         Users user = repositoryUsers.findByLoginEmail("wfeew");
-        return userMapper.toUserDto(user);
+        return UserDTO.fromDTO(user);
     }
+
     // Обновить информацию об авторизованном пользователе
     public UserDTO updateUser(UserDTO user) {
         return null;

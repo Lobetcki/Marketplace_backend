@@ -12,6 +12,6 @@ public interface UsersMapper {
 
     UsersMapper INSTANCE = Mappers.getMapper(UsersMapper.class);
 
-    @Mapping(source = "users.userImage.url", target = "userImageUrl")
+    @Mapping(source = "userImage.url", target = "userImageUrl")
     UserDTO toUserDto(Users users);
 }

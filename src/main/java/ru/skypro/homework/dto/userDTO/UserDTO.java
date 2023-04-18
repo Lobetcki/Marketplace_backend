@@ -15,7 +15,7 @@ public class UserDTO {
     private String loginEmail;
     private String userImageUrl;
 
-    public UserDTO fromDTO(Users users){
+    public static UserDTO fromDTO(Users users){
         UserDTO userDTO = new UserDTO();
 
         userDTO.setId(users.getId());
