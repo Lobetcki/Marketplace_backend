@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 import lombok.Data;
+import ru.skypro.homework.model.Users;
 
 @Data
 public class RegisterReq {
@@ -10,4 +11,15 @@ public class RegisterReq {
     private String lastName;
     private String phone;
     private Role role;
+
+    public Users toUser() {
+        Users users = new Users();
+
+        users.setLoginEmail(this.getUsername());
+        users.setFirstName(this.getFirstName());
+        users.setLastName(this.getLastName());
+        users.setPhone(this.getPhone());
+
+        return users;
+    }
 }

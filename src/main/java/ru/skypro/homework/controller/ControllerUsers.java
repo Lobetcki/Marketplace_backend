@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.userDTO.NewPasswordDTO;
@@ -24,13 +25,12 @@ public class ControllerUsers {
 
                         // Обновление пароля
     @PostMapping("/set_password")
-    public ResponseEntity<?> passwordUpdate(@RequestBody NewPasswordDTO newPasswordDTO
-                                            //Authentication authentication
-                                            ) {
-        if (serviceUsers.passwordUpdate(newPasswordDTO)) {
+    public ResponseEntity<?> passwordUpdate(@RequestBody NewPasswordDTO newPasswordDTO,
+                                            Authentication authentication) {
+        if (serviceUsers.passwordUpdate(newPasswordDTO, authentication)) {
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -39,18 +39,18 @@ public class ControllerUsers {
     public ResponseEntity<UserDTO> getUser(Authentication authentication) {
         //Users principal = (Users) authentication.getPrincipal();
         UserDTO userDTO = serviceUsers.getUser(authentication);
-        if (userDTO == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } else {
-            return ResponseEntity.ok().build();
-        }
+            return ResponseEntity.ok(userDTO);
     }
 
                     // Обновить информацию об авторизованном пользователе
     @PatchMapping("/me")
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO user) {
-        UserDTO updatedUser = serviceUsers.updateUser(user);
-        return ResponseEntity.ok(updatedUser);
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO user,
+                                              Authentication authentication) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        UserDTO userDTO = serviceUsers.updateUser(user, authentication);
+        return ResponseEntity.ok(userDTO);
     }
 
                     // Обновить аватар авторизованного пользователя

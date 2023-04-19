@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.skypro.homework.exception.InvalidParametersExeption;
 import ru.skypro.homework.exception.PasteNotFoundException;
+import ru.skypro.homework.exception.UnauthorizedExeption;
 
 @ControllerAdvice
 public class NotFoundPasteController {
@@ -15,7 +16,11 @@ public class NotFoundPasteController {
 
     @ExceptionHandler(InvalidParametersExeption.class)
     public ResponseEntity<?> invalidParam() {
-        return ResponseEntity.status(400).body("Неверно введены данные");
+        return ResponseEntity.status(400).body("Bed request");
     }
 
+    @ExceptionHandler(UnauthorizedExeption.class)
+    public ResponseEntity<?> unauthorized() {
+        return ResponseEntity.status(401).body("Unauthorized");
+    }
 }
