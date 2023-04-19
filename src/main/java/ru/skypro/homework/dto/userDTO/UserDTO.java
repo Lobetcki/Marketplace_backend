@@ -11,12 +11,12 @@ import java.util.Collection;
 
 @Getter
 @Setter
-public class UserDTO implements UserDetails {
+public class UserDTO {
     private Long Id;
+    private String username;
     private String firstName;
     private String lastName;
     private String phone;
-    private String username;
     private String userImageUrl;
 
     public static UserDTO fromDTO(Users users){
@@ -47,35 +47,5 @@ public class UserDTO implements UserDetails {
         users.setPhone(this.getPhone());
         users.setUsername(this.getUsername());
         return users;
-    }
-
-    @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
     }
 }

@@ -10,22 +10,24 @@ import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.model.Users;
 import ru.skypro.homework.repositories.RepositoryUsers;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.ServiceUsers;
+
+import java.security.Security;
 
 @Service
 @Qualifier("serviceUsers")
 public class AuthServiceImpl implements AuthService {
 
   private final UserDetailsManager manager;
-  private final Service
   private final PasswordEncoder encoder;
-  private final RepositoryUsers repositoryUsers;
+  private final ServiceUsers serviceUsers;
 
   public AuthServiceImpl(UserDetailsManager manager,
                          PasswordEncoder passwordEncoder,
-                         RepositoryUsers repositoryUsers) {
+                         ServiceUsers serviceUser) {
     this.manager = manager;
     this.encoder = passwordEncoder;
-    this.repositoryUsers = repositoryUsers;
+    this.serviceUsers = serviceUser;
   }
 
   // Авторизация пользователя
@@ -36,9 +38,9 @@ public class AuthServiceImpl implements AuthService {
 //            && encoder.matches(password, manager.loadUserByUsername(userName).getPassword())) {
 //      return true;
 //    }
-    Users users = repositoryUsers.findByUsername(userName);
+    RegisterReq users = serviceUsers.loadUserByUsername(userName);
     if (users != null ||
-            repositoryUsers.existsByPassword(encodedPassword)) {
+            users.equals(encodedPassword)) {
       return true;
     }
     return false;
@@ -46,9 +48,9 @@ public class AuthServiceImpl implements AuthService {
 
   // Регистрация пользователя
   @Override
-  public boolean register(RegisterReq registerReq, Role role) {
-    if (manager.userExists(registerReq.getUsername())
-            || repositoryUsers.existsByUsername(registerReq.getUsername())) {
+  public boolean register(RegisterReq registerReq) {
+    if (serviceUsers.loadUserByUsername(
+            registerReq.getUsername()) != null) {
       return false;
     }
     manager.createUser(
@@ -56,17 +58,17 @@ public class AuthServiceImpl implements AuthService {
                     .passwordEncoder(this.encoder::encode)
                     .password(registerReq.getPassword())
                     .username(registerReq.getUsername())
-                    .authorities(role.name())
-                    .roles(role.name())
+//                    .authorities(role.name())
+                    .roles(registerReq.getRole().name())
                     .build());
 
 
-//    Users users = repositoryUsers.findByUsername(registerReq.getUsername());
-//    users.setRole(role);
-//    users.setFirstName(registerReq.getFirstName());
-//    users.setLastName(registerReq.getLastName());
-//    users.setPhone(registerReq.getPhone());
-//    repositoryUsers.save(users);
+    Users users = repositoryUsers.findByUsername(registerReq.getUsername());
+    users.setRole(role);
+    users.setFirstName(registerReq.getFirstName());
+    users.setLastName(registerReq.getLastName());
+    users.setPhone(registerReq.getPhone());
+    repositoryUsers.save(users);
     return true;
   }
 }

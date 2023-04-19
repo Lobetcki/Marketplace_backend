@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.dto.userDTO.UserDTO;
 import ru.skypro.homework.exception.InvalidParametersExeption;
@@ -49,27 +50,32 @@ public class ServiceUsers implements UserDetailsManager {
         return true;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDTO user = UserDTO.fromDTO(repositoryUsers.findByUsername(username));
-
-        UserDetails users = new userdetails.User(
-                user.getUsername(), user.getPassword(), new ArrayList<>()
-        );
-        return user;
+    // Получить информацию об авторизованном пользователе
+    public UserDTO getUser(Authentication authentication) {
+//        loadUserByUsername(authentication.getName());
+        return UserDTO.fromDTO(repositoryUsers.findByUsername(authentication.getName()));
     }
 
     @Override
-    public void createUser(UserDetails userDetails) {
-        user.get
-        Users newUser1 = new Users();
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(encoder.encode(user.getPassword()));
+    public RegisterReq loadUserByUsername(String username) throws UsernameNotFoundException {
+//        Users users = repositoryUsers.findByUsername(username);
+
+//        RegisterReq registerReq = new RegisterReq();
+//
+//        registerReq.setUsername(users.getUsername());
+//        registerReq.setPassword(users.getPassword());
+//        registerReq.setFirstName(users.getFirstName());
+//        registerReq.setLastName(users.getLastName());
+//        registerReq.setRole(users.getRole());
+        return RegisterReq.fromRegisterReq(repositoryUsers.findByUsername(username));
+    }
+
+    public void createUser(RegisterReq userDetails) {
 
         UserDTO userDTO = (UserDTO) userDetails;
-
+        Users use = userDTO.toUser();
         Users users = repositoryUsers.findByUsername(userDetails.getUsername());
-//        users.setRole(Role.USER);
+        users.setRole(userDetails.);
         users.setFirstName(registerReq.getFirstName());
         users.setLastName(registeq.getPhone());
         repositoryUsers.save(userReq.getLastName());
@@ -85,10 +91,6 @@ public class ServiceUsers implements UserDetailsManager {
         newUser.setLastName(registerReq.getLastName());
         newUser.setPhone(registerReq.getPhone());
         repositoryUsers.save(newUser);
-
-
-
-
     }
 
 //    @Transactional
@@ -113,18 +115,6 @@ public class ServiceUsers implements UserDetailsManager {
 //        return false;
 //    }
 
-    // Получить информацию об авторизованном пользователе
-
-    public UserDTO getUser(Authentication authentication) {
-//        String login = authorizationVerification(authentication);
-//        return UserDTO.fromDTO(repositoryUsers.findByUsername(login));
-        return null;
-    }
-    // Обновить информацию об авторизованном пользователе
-
-    @Override
-    public void updateUser(UserDetails userDTO) {
-    }
 
     public UserDTO updateUsersDTO(UserDTO userDTO) {
         Users users = userDTO.toUser();
@@ -133,6 +123,11 @@ public class ServiceUsers implements UserDetailsManager {
         repositoryUsers.save(users);
 
         return userDTO;
+    }
+
+    // Обновить информацию об авторизованном пользователе
+    @Override
+    public void updateUser(UserDetails userDTO) {
     }
 
     // Обновить аватар авторизованного пользователя
