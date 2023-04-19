@@ -1,5 +1,6 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -11,10 +12,11 @@ import ru.skypro.homework.repositories.RepositoryUsers;
 import ru.skypro.homework.service.AuthService;
 
 @Service
+@Qualifier("serviceUsers")
 public class AuthServiceImpl implements AuthService {
 
   private final UserDetailsManager manager;
-
+  private final Service
   private final PasswordEncoder encoder;
   private final RepositoryUsers repositoryUsers;
 
@@ -49,20 +51,22 @@ public class AuthServiceImpl implements AuthService {
             || repositoryUsers.existsByUsername(registerReq.getUsername())) {
       return false;
     }
-//    String encodedPassword = encoder.encode(registerReq.getPassword());
     manager.createUser(
             User.builder()
                     .passwordEncoder(this.encoder::encode)
                     .password(registerReq.getPassword())
                     .username(registerReq.getUsername())
+                    .authorities(role.name())
                     .roles(role.name())
                     .build());
-    Users users = repositoryUsers.findByUsername(registerReq.getUsername());
-    users.setRole(role);
-    users.setFirstName(registerReq.getFirstName());
-    users.setLastName(registerReq.getLastName());
-    users.setPhone(registerReq.getPhone());
-    repositoryUsers.save(users);
+
+
+//    Users users = repositoryUsers.findByUsername(registerReq.getUsername());
+//    users.setRole(role);
+//    users.setFirstName(registerReq.getFirstName());
+//    users.setLastName(registerReq.getLastName());
+//    users.setPhone(registerReq.getPhone());
+//    repositoryUsers.save(users);
     return true;
   }
 }

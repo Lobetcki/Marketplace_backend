@@ -47,7 +47,7 @@ public class ControllerUsers {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        UserDTO userDTO = serviceUsers.updateUser(user, authentication);
+        UserDTO userDTO = serviceUsers.updateUsersDTO(user);
         return ResponseEntity.ok(userDTO);
     }
 

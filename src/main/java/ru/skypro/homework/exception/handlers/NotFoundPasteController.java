@@ -4,12 +4,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.skypro.homework.exception.InvalidParametersExeption;
-import ru.skypro.homework.exception.PasteNotFoundException;
+import ru.skypro.homework.exception.UsersNotFoundException;
 import ru.skypro.homework.exception.UnauthorizedExeption;
 
 @ControllerAdvice
 public class NotFoundPasteController {
-    @ExceptionHandler(PasteNotFoundException.class)
+    @ExceptionHandler(UsersNotFoundException.class)
     public ResponseEntity<?> notFound() {
         return ResponseEntity.status(404).body("Not Found");
     }
