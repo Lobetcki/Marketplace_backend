@@ -15,9 +15,9 @@ public interface RepositoryUsers extends JpaRepository<Users, Long>, JpaSpecific
     void passwordUpdate(String password, String newPassword);
 
     // Получить информацию об авторизованном пользователе
-    Users findByLoginEmail(String loginEmail);
+    Users findByUsername(String loginEmail);
 
     // Проверка наличия логина
-    boolean existsByLoginEmail(String loginEmail);
+    boolean existsByUsername(String loginEmail);
 }
 

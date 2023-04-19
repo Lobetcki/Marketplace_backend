@@ -4,12 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.userDTO.NewPasswordDTO;
 import ru.skypro.homework.dto.userDTO.UserDTO;
-import ru.skypro.homework.model.Users;
 import ru.skypro.homework.service.ServiceUsers;
 
 @RestController
@@ -23,26 +21,26 @@ public class ControllerUsers {
         this.serviceUsers = serviceUsers;
     }
 
-                        // Обновление пароля
+    // Обновление пароля
     @PostMapping("/set_password")
-    public ResponseEntity<?> passwordUpdate(@RequestBody NewPasswordDTO newPasswordDTO,
-                                            Authentication authentication) {
-        if (serviceUsers.passwordUpdate(newPasswordDTO, authentication)) {
+    public ResponseEntity<?> passwordUpdate(@RequestBody NewPasswordDTO newPasswordDTO) {
+
+        if (serviceUsers.passwordUpdate(newPasswordDTO.getNewPassword(),
+                                            newPasswordDTO.getCurrentPassword())) {
             return ResponseEntity.ok().build();
-        } else {
+        } else  {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
-                    // Получить информацию об авторизованном пользователе
+    // Получить информацию об авторизованном пользователе
     @GetMapping("/me")
     public ResponseEntity<UserDTO> getUser(Authentication authentication) {
-        //Users principal = (Users) authentication.getPrincipal();
         UserDTO userDTO = serviceUsers.getUser(authentication);
-            return ResponseEntity.ok(userDTO);
+        return ResponseEntity.ok(userDTO);
     }
 
-                    // Обновить информацию об авторизованном пользователе
+    // Обновить информацию об авторизованном пользователе
     @PatchMapping("/me")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO user,
                                               Authentication authentication) {
@@ -53,7 +51,7 @@ public class ControllerUsers {
         return ResponseEntity.ok(userDTO);
     }
 
-                    // Обновить аватар авторизованного пользователя
+    // Обновить аватар авторизованного пользователя
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadAvatarUser(@RequestParam MultipartFile avatarUser) {
         if (avatarUser == null || avatarUser.getSize() > 1024 * 300) {

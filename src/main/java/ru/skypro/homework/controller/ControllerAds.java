@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.adsDTO.AdsDTO;
@@ -24,18 +25,29 @@ public class ControllerAds {
     }
 
     // Получить все объявления
-    @GetMapping
-    public ResponseEntity<ResponseWrapperAdsDTO> getAllAds() {
-        ResponseWrapperAdsDTO adsDTO = serviceAds.getAllAds();
-        return ResponseEntity.ok(adsDTO);
+//    @GetMapping
+//    public ResponseEntity<ResponseWrapperAdsDTO> getAllAds() {
+//        ResponseWrapperAdsDTO adsDTO = serviceAds.getAllAds();
+//        return ResponseEntity.ok(adsDTO);
+//    }
+
+    // Поиск объявлений по названию
+    @GetMapping//("/{text}/search")
+    public ResponseEntity<ResponseWrapperAdsDTO> getAdsByTitle(@PathVariable String text) {
+        if (text == null || text.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(serviceAds.getAdsByTitle(text));
     }
 
     // Добавить объявление
     @PostMapping
     public ResponseEntity<AdsDTO> createAd(
+            Authentication authentication,
             @RequestBody CreateAdsDTO createAdsDTO,
             @RequestPart("image") MultipartFile image) {
-        AdsDTO adsDTO = serviceAds.createAd(createAdsDTO, image);
+        AdsDTO adsDTO = serviceAds.createAd(authentication, createAdsDTO//, image
+        );
         return ResponseEntity.status(HttpStatus.CREATED).body(adsDTO);
     }
 

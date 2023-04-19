@@ -2,7 +2,6 @@ package ru.skypro.homework.dto.userDTO;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.catalina.User;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.Users;
 
@@ -13,7 +12,7 @@ public class UserDTO {
     private String firstName;
     private String lastName;
     private String phone;
-    private String loginEmail;
+    private String username;
     private String userImageUrl;
 
     public static UserDTO fromDTO(Users users){
@@ -23,13 +22,14 @@ public class UserDTO {
         userDTO.setFirstName(users.getFirstName());
         userDTO.setLastName(users.getLastName());
         userDTO.setPhone(users.getPhone());
-        userDTO.setLoginEmail(users.getLoginEmail());
+        userDTO.setUsername(users.getUsername());
         if (users.getUserImage() == null) {
             Image image = new Image();
             image.setUrl("No image");
             users.setUserImage(image);
+        } else {
+            userDTO.setUserImageUrl(users.getUserImage().getUrl());
         }
-        userDTO.setUserImageUrl(users.getUserImage().getUrl());
 
         return userDTO;
     }
@@ -41,7 +41,7 @@ public class UserDTO {
         users.setFirstName(this.getFirstName());
         users.setLastName(this.getLastName());
         users.setPhone(this.getPhone());
-        users.setLoginEmail(this.getLoginEmail());
+        users.setUsername(this.getUsername());
         return users;
     }
 }

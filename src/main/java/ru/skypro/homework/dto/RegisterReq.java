@@ -15,7 +15,7 @@ public class RegisterReq {
     public Users toUser() {
         Users users = new Users();
 
-        users.setLoginEmail(this.getUsername());
+        users.setUsername(this.getUsername());
         users.setFirstName(this.getFirstName());
         users.setLastName(this.getLastName());
         users.setPhone(this.getPhone());

@@ -29,13 +29,14 @@ public class AuthServiceImpl implements AuthService {
   // Авторизация пользователя
   @Override
   public boolean login(String userName, String password) {
-    if (manager.userExists(userName) &&
-            encoder.matches(password, manager.loadUserByUsername(userName).getPassword())) {
-      return true;
-    }
-    Users users = repositoryUsers.findByLoginEmail(userName);
+    String encodedPassword = encoder.encode(password);
+//    if (manager.userExists(userName)
+//            && encoder.matches(password, manager.loadUserByUsername(userName).getPassword())) {
+//      return true;
+//    }
+    Users users = repositoryUsers.findByUsername(userName);
     if (users != null ||
-            repositoryUsers.existsByPassword(this.encoder.encode(password))) {
+            repositoryUsers.existsByPassword(encodedPassword)) {
       return true;
     }
     return false;
@@ -44,23 +45,23 @@ public class AuthServiceImpl implements AuthService {
   // Регистрация пользователя
   @Override
   public boolean register(RegisterReq registerReq, Role role) {
-    if (manager.userExists(registerReq.getUsername())) {
-      return false;
-    } else if (repositoryUsers.existsByLoginEmail(registerReq.getUsername())) {
+    if (manager.userExists(registerReq.getUsername())
+            || repositoryUsers.existsByUsername(registerReq.getUsername())) {
       return false;
     }
+//    String encodedPassword = encoder.encode(registerReq.getPassword());
     manager.createUser(
-        User.builder()
-            .passwordEncoder(this.encoder::encode)
-            .password(registerReq.getPassword())
-            .username(registerReq.getUsername())
-            .roles(role.name())
-            .build());
-
-    Users users = registerReq.toUser();
+            User.builder()
+                    .passwordEncoder(this.encoder::encode)
+                    .password(registerReq.getPassword())
+                    .username(registerReq.getUsername())
+                    .roles(role.name())
+                    .build());
+    Users users = repositoryUsers.findByUsername(registerReq.getUsername());
     users.setRole(role);
-    users.setPassword((manager
-            .loadUserByUsername(registerReq.getUsername())).getPassword());
+    users.setFirstName(registerReq.getFirstName());
+    users.setLastName(registerReq.getLastName());
+    users.setPhone(registerReq.getPhone());
     repositoryUsers.save(users);
     return true;
   }
