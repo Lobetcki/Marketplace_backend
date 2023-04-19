@@ -1,7 +1,6 @@
 package ru.skypro.homework.dto.mappers;
 
 import org.mapstruct.Mapper;
-
 import org.mapstruct.Mapping;
 import ru.skypro.homework.dto.commentsDTO.CommentsDTO;
 import ru.skypro.homework.model.Comments;

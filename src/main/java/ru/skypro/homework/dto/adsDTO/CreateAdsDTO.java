@@ -3,7 +3,6 @@ package ru.skypro.homework.dto.adsDTO;
 import lombok.Getter;
 import lombok.Setter;
 import ru.skypro.homework.model.Ads;
-import ru.skypro.homework.model.Users;
 
 @Getter
 @Setter

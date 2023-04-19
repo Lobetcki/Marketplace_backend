@@ -18,9 +18,10 @@ public class RegisterReq implements UserDetails {
 
     public Users toUser() {
         Users users = new Users();
+
         users.setUsername(this.getUsername());
         users.setPassword(this.getPassword());
-        users.setRole(this.);
+        users.setRole(this.getRole());
 
         users.setFirstName(this.getFirstName());
         users.setLastName(this.getLastName());

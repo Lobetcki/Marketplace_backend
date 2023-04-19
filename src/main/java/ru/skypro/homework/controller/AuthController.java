@@ -13,8 +13,6 @@ import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.service.AuthService;
 
-import static ru.skypro.homework.dto.Role.USER;
-
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -34,8 +32,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterReq req) {
-        req.setRole(req.getRole() == null ? USER : req.getRole());
-//        Role role = req.getRole() == null ? USER : req.getRole();
+        req.setRole(req.getRole() == null ? Role.USER : req.getRole());
         if (authService.register(req)) {
             return ResponseEntity.ok().build();
         } else {

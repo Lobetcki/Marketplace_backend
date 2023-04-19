@@ -2,12 +2,8 @@ package ru.skypro.homework.dto.userDTO;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.model.Users;
-
-import java.util.Collection;
 
 @Getter
 @Setter
