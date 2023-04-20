@@ -21,19 +21,19 @@ public class AdsFullDTO {
     public static AdsFullDTO fromAdsFullDTO(Ads ads) {
         AdsFullDTO adsFullDTO = new AdsFullDTO();
 
-        adsFullDTO.setPk(ads.getAdId());
+        adsFullDTO.setPk(ads.getId());
         adsFullDTO.setDescription(ads.getDescription());
         adsFullDTO.setPrice(ads.getPrice());
         adsFullDTO.setTitle(ads.getTitle());
         if (ads.getAdImage() == null) {
             adsFullDTO.setAdImageUrl("No image");
         } else {
-            adsFullDTO.setAdImageUrl(ads.getAdImage().getUrl());
+//            adsFullDTO.setAdImageUrl(ads.getAdImage().getUrl());
         }
-        adsFullDTO.setUsername(ads.getUser().getUsername());
-        adsFullDTO.setAuthorFirstName(ads.getUser().getFirstName());
-        adsFullDTO.setAuthorLastName(ads.getUser().getLastName());
-        adsFullDTO.setPhone(ads.getUser().getPhone());
+        adsFullDTO.setUsername(ads.getUsers().getUsername());
+        adsFullDTO.setAuthorFirstName(ads.getUsers().getFirstName());
+        adsFullDTO.setAuthorLastName(ads.getUsers().getLastName());
+        adsFullDTO.setPhone(ads.getUsers().getPhone());
 
         return adsFullDTO;
     }

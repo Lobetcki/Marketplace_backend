@@ -16,11 +16,11 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
+    @NonNull
+    private String username;
     private String firstName;
     private String lastName;
     private String phone;
-    @NonNull
-    private String username;
     @NonNull
     private String password;
     @Enumerated(EnumType.STRING)
@@ -31,9 +31,9 @@ public class Users {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Image userImage;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users")
     private List<Ads> ads;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users")
     private List<Comments> comments;
 
     private boolean enabled;

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import ru.skypro.homework.model.Users;
 
-public interface RepositoryUsers extends JpaRepository<Users, Long>, JpaSpecificationExecutor<Users> {
+public interface RepositoryUsers extends JpaRepository<Users, Long> {
 
     // Обновление пароля
     boolean existsByPassword(String password);

@@ -18,16 +18,16 @@ public class AdsDTO {
     public static AdsDTO fromDTO(Ads ads){
         AdsDTO adsDTO = new AdsDTO();
 
-        adsDTO.setAuthorId(ads.getUser().getId());
-        adsDTO.setPk(ads.getAdId());
+        adsDTO.setAuthorId(ads.getUsers().getId());
+        adsDTO.setPk(ads.getId());
         adsDTO.setPrice(ads.getPrice());
         adsDTO.setTitle(ads.getTitle());
         if (ads.getAdImage() == null) {
             Image image = new Image();
-            image.setUrl("No image");
+//            image.setUrl("No image");
             ads.setAdImage(image);
         } else {
-            adsDTO.setImageAdUrl(ads.getAdImage().getUrl());
+//            adsDTO.setImageAdUrl(ads.getAdImage().getUrl());
         }
         return adsDTO;
     }

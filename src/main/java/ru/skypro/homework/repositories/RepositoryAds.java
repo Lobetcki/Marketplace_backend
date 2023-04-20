@@ -3,16 +3,17 @@ package ru.skypro.homework.repositories;
 import org.apache.commons.lang3.function.Failable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import ru.skypro.homework.model.Ads;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface RepositoryAds extends JpaRepository<Ads, Long>, JpaSpecificationExecutor<Ads> {
+public interface RepositoryAds extends JpaRepository<Ads, Long> {
 
-    // Поиск объявлений по названию
     List<Ads> findByTitleContainingIgnoreCase(String text);
 
     Ads findByTitle(String title);
 
-    List<Ads> findByUserId(Long id);
+    List<Ads> findAllByUsers_Username(String username);
 }

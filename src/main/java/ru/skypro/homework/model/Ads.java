@@ -10,7 +10,7 @@ import java.util.List;
 public class Ads {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long adId;
+    private Long id;
     private String description;
     private Integer price;
     private String title;
@@ -19,8 +19,8 @@ public class Ads {
     private Image adImage;
 
     @ManyToOne
-    private Users user;
-    @OneToMany(mappedBy = "ad")
+    private Users users;
+    @OneToMany(mappedBy = "ads")
     private List<Comments> comments;
 
 }

@@ -12,12 +12,12 @@ import javax.persistence.Lob;
 public class Image {
 
     @Id
-    private String url;
+    private Long url;
 
     @Lob
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] bytes;
-    private String filePath;
-    private long fileSize;
-    private String mediaType;
+//    private String filePath;
+//    private long fileSize;
+//    private String mediaType;
 }

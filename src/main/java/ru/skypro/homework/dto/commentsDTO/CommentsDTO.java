@@ -2,6 +2,7 @@ package ru.skypro.homework.dto.commentsDTO;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.skypro.homework.model.Comments;
 
 import java.time.Instant;
 
@@ -9,13 +10,31 @@ import java.time.Instant;
 @Setter
 public class CommentsDTO {
 
-    public Integer pkCommentsId;
-    public Instant createdAtDate;
+    public Long author; // userId
+    public String authorImage;
+    public String authorFirstName;
+    public Instant createdAt;
+    public Long pk;
     public String text;
 
-    public Long authorId; // userId
-    public String authorFirstName;
-    public String authorImageUrl;
 
 
+    public static CommentsDTO fromCommentsDTO(Comments comments) {
+        CommentsDTO commentsDTO = new CommentsDTO();
+        commentsDTO.setAuthor(comments.getUsers().getId());
+//        commentsDTO.setAuthorImage();
+        commentsDTO.setAuthorFirstName(comments.getUsers().getFirstName());
+        commentsDTO.setCreatedAt(comments.getCreatedAtDate());
+        commentsDTO.setPk(comments.getId());
+        commentsDTO.setText(comments.getText());
+        return commentsDTO;
+    }
+
+    public Comments toComments() {
+        Comments comments = new Comments();
+        comments.setId(this.getPk());
+        comments.setCreatedAtDate(this.getCreatedAt());
+        comments.setText(this.getText());
+        return comments;
+    }
 }

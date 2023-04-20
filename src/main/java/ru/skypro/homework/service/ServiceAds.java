@@ -38,13 +38,14 @@ public class ServiceAds {
 //                .collect(Collectors.toList()));
 //        return wrAdsDTO;
 //    }
+
                             // Добавить объявление
     public AdsDTO createAd(Authentication authentication,
                            CreateAdsDTO createAdsDTO//, MultipartFile image
     ) {
         Ads ads = createAdsDTO.toAds();
         ads.setAdImage(null);
-        ads.setUser(repositoryUsers.findByUsername("Asd@Asd.com"
+        ads.setUsers(repositoryUsers.findByUsername("Asd@Asd.com"
                // authentication.getName()
                                                     ));
         repositoryAds.save(ads);
@@ -82,20 +83,17 @@ public class ServiceAds {
     }
 
     // Получить объявления авторизованного пользователя
-
     public ResponseWrapperAdsDTO getAdsByCurrentUser(
             Authentication authentication){
-        Users user = repositoryUsers.findByUsername("Asd@Asd.com");
+//        Users user = repositoryUsers.findByUsername("Asd@Asd.com");
 
-        List<AdsDTO> adsList = repositoryAds.findByUserId(user.getId())
+        List<AdsDTO> adsList = repositoryAds.findAllByUsers_Username("Asd@Asd.com")
                 .stream().map(AdsDTO::fromDTO)
                 .collect(Collectors.toList());
         return ResponseWrapperAdsDTO.fromDTO(adsList);
     }
 
-
     // Обновить картинку объявления
-
     public byte[] updateAdImage(Long id, MultipartFile image) {
         return null;
     }

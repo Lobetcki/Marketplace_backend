@@ -25,10 +25,10 @@ public class UserDTO {
         userDTO.setUsername(users.getUsername());
         if (users.getUserImage() == null) {
             Image image = new Image();
-            image.setUrl("No image");
+//            image.setUrl();
             users.setUserImage(image);
         } else {
-            userDTO.setUserImageUrl(users.getUserImage().getUrl());
+//            userDTO.setUserImageUrl(users.getUserImage().getUrl());
         }
 
         return userDTO;
