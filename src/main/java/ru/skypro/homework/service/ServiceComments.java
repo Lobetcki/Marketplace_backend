@@ -9,11 +9,13 @@ public class ServiceComments {
 
                     // Получить комментарии объявления
     public ResponseWrapperCommentDTO getCommentsByAdId(Long id) {
+
         return new ResponseWrapperCommentDTO();
     }
 
                     // Добавить комментарий к объявлению
     public CommentsDTO addComment(Long adId, CommentsDTO commentDTO) {
+
         return null;
     }
 

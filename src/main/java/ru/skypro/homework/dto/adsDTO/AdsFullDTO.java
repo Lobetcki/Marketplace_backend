@@ -1,8 +1,6 @@
 package ru.skypro.homework.dto.adsDTO;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import ru.skypro.homework.model.Ads;
 
 @Data
@@ -27,9 +25,11 @@ public class AdsFullDTO {
         adsFullDTO.setDescription(ads.getDescription());
         adsFullDTO.setPrice(ads.getPrice());
         adsFullDTO.setTitle(ads.getTitle());
-
-        adsFullDTO.setAdImageUrl(ads.getAdImage().getUrl());
-
+        if (ads.getAdImage() == null) {
+            adsFullDTO.setAdImageUrl("No image");
+        } else {
+            adsFullDTO.setAdImageUrl(ads.getAdImage().getUrl());
+        }
         adsFullDTO.setUsername(ads.getUser().getUsername());
         adsFullDTO.setAuthorFirstName(ads.getUser().getFirstName());
         adsFullDTO.setAuthorLastName(ads.getUser().getLastName());

@@ -19,7 +19,8 @@ public class ControllerComments {
 
     // Получить комментарии объявления
     @GetMapping("/{id}/comments")
-    public ResponseEntity<ResponseWrapperCommentDTO> getCommentsByAdId(@PathVariable Long id) {
+    public ResponseEntity<ResponseWrapperCommentDTO> getCommentsByAdId(
+            @PathVariable Long id) {
         ResponseWrapperCommentDTO commentsListDTO = serviceComments.getCommentsByAdId(id);
         return ResponseEntity.ok(commentsListDTO);
     }

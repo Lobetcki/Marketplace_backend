@@ -52,9 +52,9 @@ public class ServiceUsers {
     // Получить информацию об авторизованном пользователе
     public UserDTO getUser(Authentication authentication) {
         Users user = repositoryUsers.findByUsername("Asd@Asd.com");
-        if (user == null) {
-            throw new UsernameNotFoundException("Not found");
-        }
+//        if (user == null) {
+//            throw new UsernameNotFoundException("Not found");
+//        }
         return UserDTO.fromDTO(user);
     }
 
@@ -71,6 +71,7 @@ public class ServiceUsers {
         return users;
     }
 
+    // Обновить информацию об авторизованном пользователе
     public UserDTO updateUsersDTO(UserDTO userDTO) {
         Users users = repositoryUsers.findByUsername(userDTO.getUsername());
         userDTO.toUser(users);
@@ -78,10 +79,6 @@ public class ServiceUsers {
         return userDTO;
     }
 
-
-    // Обновить информацию об авторизованном пользователе
-    public void updateUser(UserDetails userDTO) {
-    }
 
     // Обновить аватар авторизованного пользователя
 

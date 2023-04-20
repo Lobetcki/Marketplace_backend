@@ -32,8 +32,9 @@ public class ControllerAds {
 //    }
 
     // Поиск объявлений по названию
-    @GetMapping//("/{text}/search")
-    public ResponseEntity<ResponseWrapperAdsDTO> getAdsByTitle(@PathVariable String text) {
+    @GetMapping
+    public ResponseEntity<ResponseWrapperAdsDTO> getAdsByTitle(
+                                @RequestParam() String text) {
         if (text == null || text.isBlank()) {
             return ResponseEntity.badRequest().build();
         }
@@ -63,7 +64,7 @@ public class ControllerAds {
 
     // Удалить объявление
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteAd(@PathVariable Long id) {
+    public ResponseEntity<?> deleteAd(@PathVariable Long id) {
         serviceAds.deleteAd(id);
         return ResponseEntity.noContent().build();
     }
@@ -82,12 +83,14 @@ public class ControllerAds {
 
     // Получить объявления авторизованного пользователя
     @GetMapping("/me")
-    public ResponseEntity<ResponseWrapperAdsDTO> getAdsByCurrentUser() {
-        ResponseWrapperAdsDTO adsDTOs = serviceAds.getAdsByCurrentUser();
+    public ResponseEntity<ResponseWrapperAdsDTO> getAdsByCurrentUser(
+            Authentication authentication
+        ){
+        ResponseWrapperAdsDTO adsDTOs = serviceAds.getAdsByCurrentUser(authentication);
         return ResponseEntity.ok(adsDTOs);
     }
 
-
+    // Обновить картинку объявления
     @PatchMapping("/{id}/image")
     public ResponseEntity<byte[]> updateAdImage(
             @PathVariable Long id,
