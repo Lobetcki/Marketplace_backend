@@ -41,11 +41,11 @@ public class ControllerAds {
     }
 
     // Добавить объявление
-    @PostMapping
+    @PostMapping//(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDTO> createAd(
-            Authentication authentication,
             @RequestBody CreateAdsDTO createAdsDTO,
-            @RequestPart("image") MultipartFile image) {
+            //@RequestParam("image") MultipartFile image,
+            Authentication authentication) {
         AdsDTO adsDTO = serviceAds.createAd(authentication, createAdsDTO//, image
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(adsDTO);

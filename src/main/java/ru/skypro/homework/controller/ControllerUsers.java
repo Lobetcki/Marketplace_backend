@@ -24,9 +24,12 @@ public class ControllerUsers {
     // Обновление пароля
     @PostMapping("/set_password")
     public ResponseEntity<?> passwordUpdate(@RequestBody NewPasswordDTO newPasswordDTO) {
-
-        if (serviceUsers.passwordUpdate(newPasswordDTO.getNewPassword(),
-                                            newPasswordDTO.getCurrentPassword())) {
+//        serviceUsers.changePassword(newPasswordDTO.getCurrentPassword(),"a"
+                //newPasswordDTO.getNewPassword()
+//        );
+        if (serviceUsers.passwordUpdate(newPasswordDTO.getCurrentPassword(),
+                newPasswordDTO.getNewPassword()
+        )) {
             return ResponseEntity.ok().build();
         } else  {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

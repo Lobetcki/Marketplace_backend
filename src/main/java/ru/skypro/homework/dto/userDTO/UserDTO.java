@@ -34,10 +34,10 @@ public class UserDTO {
         return userDTO;
     }
 
-    public Users toUser() {
-        Users users = new Users();
+    public Users toUser(Users users) {
+//        Users users = new Users();
 
-        users.setId(this.getId());
+//        users.setId(this.getId());
         users.setFirstName(this.getFirstName());
         users.setLastName(this.getLastName());
         users.setPhone(this.getPhone());

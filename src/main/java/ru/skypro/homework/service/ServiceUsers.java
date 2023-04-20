@@ -4,7 +4,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.RegisterReq;
@@ -17,63 +16,46 @@ import ru.skypro.homework.repositories.RepositoryUsers;
 import javax.transaction.Transactional;
 
 @Service
-public class ServiceUsers implements UserDetailsManager {
+public class ServiceUsers {
     private final RepositoryUsers repositoryUsers;
     private final RepositoryImage repositoryImage;
     private final PasswordEncoder encoder;
+//    private final MyUserDetailsManager myUserDetailsManager;
 
     public ServiceUsers(RepositoryUsers repositoryUsers,
-                        RepositoryImage repositoryImage, PasswordEncoder encoder) {
+                        RepositoryImage repositoryImage,
+                        PasswordEncoder encoder
+//                       , MyUserDetailsManager myUserDetailsManager
+                        ) {
         this.repositoryUsers = repositoryUsers;
         this.repositoryImage = repositoryImage;
         this.encoder = encoder;
+//        this.myUserDetailsManager = myUserDetailsManager;
     }
 
     // Обновление пароля
-    @Override
-    public void changePassword(String oldPassword, String newPassword) {
-        repositoryUsers.passwordUpdate(oldPassword, newPassword);
-    }
-
     @Transactional
-    public boolean passwordUpdate(String password,
-                                  String newPasswordDTO) {
-        if (newPasswordDTO == null || newPasswordDTO.isBlank()) {
+    public boolean passwordUpdate(String oldPassword, String newPassword) {
+        if (newPassword == null || newPassword.isBlank()) {
             throw new InvalidParametersExeption();
         }
-        String newPassword = encoder.encode(newPasswordDTO);
-        repositoryUsers.existsByPassword(password);
-//        String authPassword = ((Users) authentication.getPrincipal()).getPassword();
-        changePassword(password, newPassword);
-        return true;
+        oldPassword = encoder.encode(oldPassword);
+        newPassword = encoder.encode(newPassword);
+        if (repositoryUsers.existsByPassword(oldPassword)) {
+//            throw new InvalidParametersExeption();
+            repositoryUsers.passwordUpdate(oldPassword, newPassword);
+            return true;
+        }
+        return false;
     }
 
     // Получить информацию об авторизованном пользователе
     public UserDTO getUser(Authentication authentication) {
-//        loadUserByUsername(authentication.getName());
-        return UserDTO.fromDTO(repositoryUsers.findByUsername(authentication.getName()));
-    }
-
-    @Override
-    public RegisterReq loadUserByUsername(String username) throws UsernameNotFoundException {
-//        Users users = repositoryUsers.findByUsername(username);
-
-//        RegisterReq registerReq = new RegisterReq();
-//
-//        registerReq.setUsername(users.getUsername());
-//        registerReq.setPassword(users.getPassword());
-//        registerReq.setFirstName(users.getFirstName());
-//        registerReq.setLastName(users.getLastName());
-//        registerReq.setRole(users.getRole());
-        return RegisterReq.fromRegisterReq(repositoryUsers.findByUsername(username));
-    }
-
-    @Override
-    public void createUser(UserDetails userDetails) {
-//        Users users = new Users();
-//        users.setUsername(userDetails.getUsername());
-//        users.setPassword(userDetails.getPassword());
-//        repositoryUsers.save(users);
+        Users user = repositoryUsers.findByUsername("Asd@Asd.com");
+        if (user == null) {
+            throw new UsernameNotFoundException("Not found");
+        }
+        return UserDTO.fromDTO(user);
     }
 
     public Users saveUser(RegisterReq registerReq) {
@@ -90,33 +72,20 @@ public class ServiceUsers implements UserDetailsManager {
     }
 
     public UserDTO updateUsersDTO(UserDTO userDTO) {
-        Users users = userDTO.toUser();
-        users.setUserImage(repositoryImage
-                .findById(userDTO.getUserImageUrl()).orElse(null));
+        Users users = repositoryUsers.findByUsername(userDTO.getUsername());
+        userDTO.toUser(users);
         repositoryUsers.save(users);
-
         return userDTO;
     }
 
 
     // Обновить информацию об авторизованном пользователе
-    @Override
     public void updateUser(UserDetails userDTO) {
     }
 
     // Обновить аватар авторизованного пользователя
 
     public void uploadAvatar(MultipartFile avatarUser) {
-
     }
 
-
-    @Override
-    public void deleteUser(String username) {
-    }
-
-    @Override
-    public boolean userExists(String username) {
-        return false;
-    }
 }

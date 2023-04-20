@@ -7,7 +7,9 @@ import ru.skypro.homework.dto.adsDTO.AdsDTO;
 import ru.skypro.homework.dto.adsDTO.AdsFullDTO;
 import ru.skypro.homework.dto.adsDTO.CreateAdsDTO;
 import ru.skypro.homework.dto.adsDTO.ResponseWrapperAdsDTO;
+import ru.skypro.homework.exception.UsersNotFoundException;
 import ru.skypro.homework.model.Ads;
+import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repositories.RepositoryAds;
 import ru.skypro.homework.repositories.RepositoryUsers;
 
@@ -34,13 +36,16 @@ public class ServiceAds {
     }
                             // Добавить объявление
     public AdsDTO createAd(Authentication authentication,
-                           CreateAdsDTO createAdsDTO //, Image image
+                           CreateAdsDTO createAdsDTO//, MultipartFile image
     ) {
         Ads ads = createAdsDTO.toAds();
-//        ads.setAdImage(image);
-        ads.setUser(repositoryUsers.findByUsername(authentication.getName()));
-
-        return null;
+        ads.setAdImage(null);
+        ads.setUser(repositoryUsers.findByUsername("Asd@Asd.com"
+               // authentication.getName()
+                                                    ));
+        repositoryAds.save(ads);
+        ads = repositoryAds.findByTitle(createAdsDTO.getTitle());
+        return AdsDTO.fromDTO(ads);
     }
 
     // Поиск объявлений по названию
@@ -53,12 +58,13 @@ public class ServiceAds {
     }
 
     // Получить информацию об объявлении
-
     public AdsFullDTO getAdById(Long id) {
-        return null;
+        return AdsFullDTO.fromAdsFullDTO(
+                repositoryAds.findById(id).
+                        orElseThrow(UsersNotFoundException::new));
     }
-    // Удалить объявление
 
+    // Удалить объявление
     public boolean deleteAd(Long id) {
         return false;
     }

@@ -1,25 +1,25 @@
 package ru.skypro.homework.dto.adsDTO;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Image;
 
-@Getter
-@Setter
+@Data
 public class AdsDTO {
 
-    private Long pkAdId;
+    private Long authorId;
+    private String imageAdUrl;
+    private Long pk;
     private Integer price;
     private String title;
-    private String imageAdUrl;
-    private Long authorId;
 
     public static AdsDTO fromDTO(Ads ads){
         AdsDTO adsDTO = new AdsDTO();
 
         adsDTO.setAuthorId(ads.getUser().getId());
-        adsDTO.setPkAdId(ads.getAdId());
+        adsDTO.setPk(ads.getAdId());
         adsDTO.setPrice(ads.getPrice());
         adsDTO.setTitle(ads.getTitle());
         if (ads.getAdImage() == null) {

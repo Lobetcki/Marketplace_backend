@@ -45,18 +45,15 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         (authorization) ->
                                 authorization
-                                        .mvcMatchers(AUTH_WHITELIST)
-                                        .permitAll()
-                                        .mvcMatchers("/ads")
-                                        .permitAll()
-                                        .mvcMatchers("/ads/**", "/users/**")
-                                        .authenticated()
-                                        .mvcMatchers("/users/**")
-                                        .hasAnyAuthority("USER", "ADMIN")
+                                        .mvcMatchers(AUTH_WHITELIST).permitAll()
+//                                        .mvcMatchers("/ads/").permitAll()
+//                                        .mvcMatchers("/ads/**", "/users/**").authenticated()
+//                                        .mvcMatchers("/users/**")
+//                                        .hasAnyAuthority("USER", "ADMIN")
                 )
                 .cors()
-//        .disable()
-                .and()
+        .disable()
+//                .and()
                 .httpBasic(withDefaults());
         return http.build();
     }

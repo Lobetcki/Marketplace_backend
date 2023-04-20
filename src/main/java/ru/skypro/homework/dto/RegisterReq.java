@@ -8,7 +8,8 @@ import ru.skypro.homework.model.Users;
 import java.util.Collection;
 
 @Data
-public class RegisterReq implements UserDetails {
+public class RegisterReq //implements UserDetails
+{
     private String username;
     private String password;
     private String firstName;
@@ -37,34 +38,36 @@ public class RegisterReq implements UserDetails {
         registerReq.setPassword(users.getPassword());
         registerReq.setFirstName(users.getFirstName());
         registerReq.setLastName(users.getLastName());
+        registerReq.setPhone(users.getPhone());
         registerReq.setRole(users.getRole());
 
         return registerReq;
     }
 
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return null;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
 }
+//

@@ -12,7 +12,7 @@ public interface RepositoryUsers extends JpaRepository<Users, Long>, JpaSpecific
     boolean existsByPassword(String password);
     @Modifying
     @Query(value = "UPDATE users u SET password = ?2 WHERE u.password = ?1", nativeQuery = true)
-    void passwordUpdate(String password, String newPassword);
+    void passwordUpdate(String oldPassword, String newPassword);
 
     // Получить информацию об авторизованном пользователе
     Users findByUsername(String loginEmail);

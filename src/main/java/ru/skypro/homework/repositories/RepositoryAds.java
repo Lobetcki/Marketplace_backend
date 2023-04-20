@@ -10,4 +10,6 @@ public interface RepositoryAds extends JpaRepository<Ads, Long>, JpaSpecificatio
 
     // Поиск объявлений по названию
     List<Ads> findByTitleContainingIgnoreCase(String text);
+
+    Ads findByTitle(String title);
 }

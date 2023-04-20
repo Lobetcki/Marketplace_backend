@@ -2,46 +2,50 @@ package ru.skypro.homework.service.impl;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.repositories.RepositoryUsers;
 import ru.skypro.homework.service.AuthService;
+import ru.skypro.homework.service.MyUserDetailsManager;
 import ru.skypro.homework.service.ServiceUsers;
 
 @Service
 @Qualifier("serviceUsers")
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsManager manager;
+    private final MyUserDetailsManager userDetailsManager;
     private final PasswordEncoder encoder;
     private final ServiceUsers serviceUsers;
     private final RepositoryUsers repositoryUsers;
 
-    public AuthServiceImpl(UserDetailsManager manager,
+    public AuthServiceImpl(MyUserDetailsManager manager,
                            PasswordEncoder passwordEncoder,
                            ServiceUsers serviceUser, RepositoryUsers repositoryUsers) {
-        this.manager = manager;
+        this.userDetailsManager = manager;
         this.encoder = passwordEncoder;
         this.serviceUsers = serviceUser;
         this.repositoryUsers = repositoryUsers;
     }
 
     // Авторизация пользователя
+//    @Override
+//    public boolean login(String userName, String password) {
+//        password = encoder.encode(password);
+//        RegisterReq users = serviceUsers.loadUserByUsername(userName);
+//        String oldPassword = users.getPassword();
+//        return oldPassword.equals(password);
+//    }
+
     @Override
     public boolean login(String userName, String password) {
-        String encodedPassword = encoder.encode(password);
-//    if (manager.userExists(userName)
-//            && encoder.matches(password, manager.loadUserByUsername(userName).getPassword())) {
-//      return true;
-//    }
-        RegisterReq users = serviceUsers.loadUserByUsername(userName);
-        if (users != null ||
-                (users.getPassword()).equals(encodedPassword)) {
-            return true;
+        if (!userDetailsManager.userExists(userName)) {
+            return false;
         }
-        return false;
+        UserDetails userDetails = userDetailsManager.loadUserByUsername(userName);
+        return encoder.matches(password, userDetails.getPassword());
     }
 
     // Регистрация пользователя
@@ -50,7 +54,8 @@ public class AuthServiceImpl implements AuthService {
         if (repositoryUsers.existsByUsername(registerReq.getUsername())) {
             return false;
         }
-        manager.createUser(
+
+        userDetailsManager.createUser(
                 User.builder()
                         .passwordEncoder(rawPassword -> this.encoder.encode(rawPassword))
                         .password(registerReq.getPassword())
