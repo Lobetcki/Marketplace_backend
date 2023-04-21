@@ -35,7 +35,7 @@ public class ControllerComments {
     // Удалить комментарий
     @DeleteMapping("/{adId}/comments/{commentId}")
     public ResponseEntity deleteComment(@PathVariable Long adId,
-                                              @PathVariable Long commentId) {
+                                        @PathVariable Long commentId) {
         if (serviceComments.deleteComment(adId, commentId)) {
             return ResponseEntity.ok().build();
         } else {

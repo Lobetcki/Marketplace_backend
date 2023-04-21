@@ -28,13 +28,13 @@ public class AdsFullDTO {
         if (ads.getAdImage() == null) {
             adsFullDTO.setAdImageUrl("No image");
         } else {
-//            adsFullDTO.setAdImageUrl(ads.getAdImage().getUrl());
+            adsFullDTO.setAdImageUrl("https://avatar/"
+                    + ads.getAdImage().getUrl());
         }
         adsFullDTO.setUsername(ads.getUsers().getUsername());
         adsFullDTO.setAuthorFirstName(ads.getUsers().getFirstName());
         adsFullDTO.setAuthorLastName(ads.getUsers().getLastName());
         adsFullDTO.setPhone(ads.getUsers().getPhone());
-
         return adsFullDTO;
     }
 }

@@ -1,11 +1,7 @@
 package ru.skypro.homework.dto;
 
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import ru.skypro.homework.model.Users;
-
-import java.util.Collection;
 
 @Data
 public class RegisterReq //implements UserDetails
@@ -16,6 +12,19 @@ public class RegisterReq //implements UserDetails
     private String lastName;
     private String phone;
     private Role role;
+
+    public static RegisterReq fromRegisterReq(Users users) {
+        RegisterReq registerReq = new RegisterReq();
+
+        registerReq.setUsername(users.getUsername());
+        registerReq.setPassword(users.getPassword());
+        registerReq.setFirstName(users.getFirstName());
+        registerReq.setLastName(users.getLastName());
+        registerReq.setPhone(users.getPhone());
+        registerReq.setRole(users.getRole());
+
+        return registerReq;
+    }
 
     public Users toUser() {
         Users users = new Users();
@@ -29,19 +38,6 @@ public class RegisterReq //implements UserDetails
         users.setPhone(this.getPhone());
 
         return users;
-    }
-
-    public static RegisterReq fromRegisterReq(Users users){
-        RegisterReq registerReq = new RegisterReq();
-
-        registerReq.setUsername(users.getUsername());
-        registerReq.setPassword(users.getPassword());
-        registerReq.setFirstName(users.getFirstName());
-        registerReq.setLastName(users.getLastName());
-        registerReq.setPhone(users.getPhone());
-        registerReq.setRole(users.getRole());
-
-        return registerReq;
     }
 
 
@@ -70,4 +66,3 @@ public class RegisterReq //implements UserDetails
 //        return true;
 //    }
 }
-//

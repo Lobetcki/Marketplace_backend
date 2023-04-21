@@ -25,16 +25,16 @@ public class ControllerAds {
     }
 
     // Получить все объявления
-//    @GetMapping
-//    public ResponseEntity<ResponseWrapperAdsDTO> getAllAds() {
-//        ResponseWrapperAdsDTO adsDTO = serviceAds.getAllAds();
-//        return ResponseEntity.ok(adsDTO);
-//    }
+    @GetMapping
+    public ResponseEntity<ResponseWrapperAdsDTO> getAllAds() {
+        ResponseWrapperAdsDTO adsDTO = serviceAds.getAllAds();
+        return ResponseEntity.ok(adsDTO);
+    }
 
     // Поиск объявлений по названию
-    @GetMapping
+    @GetMapping("/source")
     public ResponseEntity<ResponseWrapperAdsDTO> getAdsByTitle(
-                                @RequestParam() String text) {
+            @RequestParam() String text) {
         if (text == null || text.isBlank()) {
             return ResponseEntity.badRequest().build();
         }
@@ -42,13 +42,11 @@ public class ControllerAds {
     }
 
     // Добавить объявление
-    @PostMapping//(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdsDTO> createAd(
-            @RequestBody CreateAdsDTO createAdsDTO,
-            //@RequestParam("image") MultipartFile image,
-            Authentication authentication) {
-        AdsDTO adsDTO = serviceAds.createAd(authentication, createAdsDTO//, image
-        );
+    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdsDTO> createAd(@RequestBody CreateAdsDTO createAdsDTO,
+                                           @RequestParam MultipartFile image,
+                                           Authentication authentication) {
+        AdsDTO adsDTO = serviceAds.createAd(authentication, createAdsDTO, image);
         return ResponseEntity.status(HttpStatus.CREATED).body(adsDTO);
     }
 
@@ -85,7 +83,7 @@ public class ControllerAds {
     @GetMapping("/me")
     public ResponseEntity<ResponseWrapperAdsDTO> getAdsByCurrentUser(
             Authentication authentication
-        ){
+    ) {
         ResponseWrapperAdsDTO adsDTOs = serviceAds.getAdsByCurrentUser(authentication);
         return ResponseEntity.ok(adsDTOs);
     }
@@ -93,9 +91,9 @@ public class ControllerAds {
     // Обновить картинку объявления
     @PatchMapping("/{id}/image")
     public ResponseEntity<byte[]> updateAdImage(
-            @PathVariable Long id,
+            @PathVariable Long adid,
             @RequestParam("image") MultipartFile image) {
-        byte[] updatedImage = serviceAds.updateAdImage(id, image);
+        byte[] updatedImage = serviceAds.updateAdImage(adid, image);
         if (updatedImage == null) {
             return ResponseEntity.notFound().build();
         }

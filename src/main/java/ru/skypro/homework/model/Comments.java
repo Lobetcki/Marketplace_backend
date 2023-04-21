@@ -10,13 +10,13 @@ import java.time.Instant;
 public class Comments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long Id;
+    public Long id;
     public Instant createdAtDate;
     public String text;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Users users;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Ads ads;
 
 }

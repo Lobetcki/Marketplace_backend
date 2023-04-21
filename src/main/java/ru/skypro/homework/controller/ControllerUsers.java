@@ -25,13 +25,13 @@ public class ControllerUsers {
     @PostMapping("/set_password")
     public ResponseEntity<?> passwordUpdate(@RequestBody NewPasswordDTO newPasswordDTO) {
 //        serviceUsers.changePassword(newPasswordDTO.getCurrentPassword(),"a"
-                //newPasswordDTO.getNewPassword()
+        //newPasswordDTO.getNewPassword()
 //        );
         if (serviceUsers.passwordUpdate(newPasswordDTO.getCurrentPassword(),
                 newPasswordDTO.getNewPassword()
         )) {
             return ResponseEntity.ok().build();
-        } else  {
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
@@ -56,12 +56,11 @@ public class ControllerUsers {
 
     // Обновить аватар авторизованного пользователя
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadAvatarUser(@RequestParam MultipartFile avatarUser) {
-        if (avatarUser == null || avatarUser.getSize() > 1024 * 300) {
-            return ResponseEntity.badRequest().body("File is too big");
-        }
-        serviceUsers.uploadAvatar(avatarUser);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> uploadAvatarUser(
+            @RequestParam MultipartFile avatarUser,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(serviceUsers.uploadAvatar(avatarUser, authentication));
     }
 }
 

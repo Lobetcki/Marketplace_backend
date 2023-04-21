@@ -3,16 +3,18 @@ package ru.skypro.homework.service;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.commentsDTO.CommentsDTO;
 import ru.skypro.homework.dto.commentsDTO.ResponseWrapperCommentDTO;
+import ru.skypro.homework.exception.UsersNotFoundException;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Comments;
 import ru.skypro.homework.repositories.RepositoryAds;
 import ru.skypro.homework.repositories.RepositoryComments;
-import ru.skypro.homework.exception.UsersNotFoundException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ServiceComments {
 
     private final RepositoryComments repositoryComments;
@@ -33,7 +35,7 @@ public class ServiceComments {
         return ResponseWrapperCommentDTO.fromDTO(listDTO);
     }
 
-                    // Добавить комментарий к объявлению
+    // Добавить комментарий к объявлению
     public CommentsDTO addComment(Long adId, CommentsDTO commentDTO) {
         Ads ads = repositoryAds.findById(adId).orElseThrow(UsersNotFoundException::new);
         if (ads == null) {
@@ -43,16 +45,25 @@ public class ServiceComments {
         comments.setAds(ads);
         comments.setUsers(ads.getUsers());
         repositoryComments.save(comments);
-        return null;
+        return CommentsDTO.fromCommentsDTO(
+                repositoryComments.findByText(commentDTO.getText()));
     }
 
-                    // Удалить комментарий
+    // Удалить комментарий
     public boolean deleteComment(Long adId, Long commentId) {
-        return repositoryComments.deleteByIdAndAdsId(commentId, adId);
+        Comments comments = repositoryComments.findByIdAndAdsId(commentId, adId)
+                .orElseThrow(UsersNotFoundException::new);
+        repositoryComments.delete(comments);
+        return true;
     }
 
-                    // Обновить комментарий
-    public CommentsDTO updateComment(Long adId, Long commentId, CommentsDTO commentDTO) {
-        return null;
+    // Обновить комментарий
+    public CommentsDTO updateComment(Long adId, Long commentId,
+                                     CommentsDTO commentDTO) {
+        Comments comments = repositoryComments.findByIdAndAdsId(commentId, adId)
+                .orElseThrow(UsersNotFoundException::new);
+        comments.setText(commentDTO.getText());
+        repositoryComments.save(comments);
+        return commentDTO;
     }
 }

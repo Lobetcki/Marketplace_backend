@@ -2,8 +2,6 @@ package ru.skypro.homework.dto.commentsDTO;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.skypro.homework.dto.adsDTO.AdsDTO;
-import ru.skypro.homework.dto.adsDTO.ResponseWrapperAdsDTO;
 
 import java.util.List;
 

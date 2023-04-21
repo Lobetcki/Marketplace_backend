@@ -10,7 +10,7 @@ import java.time.Instant;
 @Setter
 public class CommentsDTO {
 
-    public Long author; // userId
+    public Long author;
     public String authorImage;
     public String authorFirstName;
     public Instant createdAt;
@@ -18,11 +18,11 @@ public class CommentsDTO {
     public String text;
 
 
-
     public static CommentsDTO fromCommentsDTO(Comments comments) {
         CommentsDTO commentsDTO = new CommentsDTO();
         commentsDTO.setAuthor(comments.getUsers().getId());
-//        commentsDTO.setAuthorImage();
+        commentsDTO.setAuthorImage("https://avatar/"
+                + comments.getUsers().getUserImage().getUrl());
         commentsDTO.setAuthorFirstName(comments.getUsers().getFirstName());
         commentsDTO.setCreatedAt(comments.getCreatedAtDate());
         commentsDTO.setPk(comments.getId());

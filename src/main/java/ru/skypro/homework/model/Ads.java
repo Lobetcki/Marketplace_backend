@@ -18,9 +18,9 @@ public class Ads {
     @OneToOne(cascade = CascadeType.ALL)
     private Image adImage;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Users users;
-    @OneToMany(mappedBy = "ads")
+    @OneToMany(mappedBy = "ads", cascade = CascadeType.ALL)
     private List<Comments> comments;
 
 }

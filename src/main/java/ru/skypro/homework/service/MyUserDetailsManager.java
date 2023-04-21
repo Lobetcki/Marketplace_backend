@@ -1,11 +1,11 @@
 package ru.skypro.homework.service;
 
-import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.repositories.RepositoryUsers;
+
 @Service
 public class MyUserDetailsManager implements UserDetailsManager {
 
@@ -42,6 +42,6 @@ public class MyUserDetailsManager implements UserDetailsManager {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        return (UserDetails) repositoryUsers.findByUsername(username);
     }
 }

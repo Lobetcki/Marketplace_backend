@@ -2,9 +2,7 @@ package ru.skypro.homework.dto.adsDTO;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.skypro.homework.model.Ads;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter

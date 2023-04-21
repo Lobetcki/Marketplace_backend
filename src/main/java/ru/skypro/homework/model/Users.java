@@ -15,7 +15,7 @@ public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     @NonNull
     private String username;
     private String firstName;
@@ -31,13 +31,9 @@ public class Users {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Image userImage;
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private List<Ads> ads;
     @OneToMany(mappedBy = "users")
     private List<Comments> comments;
-
     private boolean enabled;
-
-
-
 }

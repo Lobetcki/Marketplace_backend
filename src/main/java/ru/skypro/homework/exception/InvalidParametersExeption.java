@@ -1,5 +1,5 @@
 package ru.skypro.homework.exception;
 
-public class InvalidParametersExeption extends RuntimeException{
+public class InvalidParametersExeption extends RuntimeException {
 
 }
