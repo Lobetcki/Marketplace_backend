@@ -4,6 +4,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.RegisterReq;
+import ru.skypro.homework.model.Users;
 import ru.skypro.homework.repositories.RepositoryUsers;
 
 @Service
@@ -41,7 +43,10 @@ public class MyUserDetailsManager implements UserDetailsManager {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) repositoryUsers.findByUsername(username);
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
+
+        return RegisterReq.fromRegisterReq(
+                repositoryUsers.findByUsernameIgnoreCase(username));
     }
 }

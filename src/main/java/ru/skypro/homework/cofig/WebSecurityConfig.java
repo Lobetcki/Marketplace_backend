@@ -1,4 +1,4 @@
-package ru.skypro.homework;
+package ru.skypro.homework.cofig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,8 @@ public class WebSecurityConfig {
             "/webjars/**",
             "/login",
             "/register",
-            "/ads"
+            "/ads",
+            "/ads/image/**"
     };
 
 //    @Bean
@@ -47,14 +48,12 @@ public class WebSecurityConfig {
                         (authorization) ->
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST).permitAll()
-//                                        .mvcMatchers("/ads/").permitAll()
-//                                        .mvcMatchers("/ads/**", "/users/**").authenticated()
-//                                        .mvcMatchers("/users/**")
-//                                        .hasAnyAuthority("USER", "ADMIN")
+                                        .mvcMatchers("/ads/**", "/users/**").authenticated()
+                                        .anyRequest()
+                                        .authenticated()
                 )
                 .cors()
-                .disable()
-//                .and()
+                .and()
                 .httpBasic(withDefaults());
         return http.build();
     }

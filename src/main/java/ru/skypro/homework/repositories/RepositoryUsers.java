@@ -3,19 +3,17 @@ package ru.skypro.homework.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.skypro.homework.model.Users;
 
 public interface RepositoryUsers extends JpaRepository<Users, Long> {
 
-    // Обновление пароля
-    boolean existsByPassword(String password);
-
     @Modifying
-    @Query(value = "UPDATE users u SET password = ?2 WHERE u.password = ?1", nativeQuery = true)
-    void passwordUpdate(String oldPassword, String newPassword);
+    @Query("UPDATE Users u SET u.password = :newPassword WHERE u.username = :username")
+    boolean passwordUpdate(@Param("newPassword") String newPassword, @Param("username") String username);
 
     // Получить информацию об авторизованном пользователе
-    Users findByUsername(String loginEmail);
+    Users findByUsernameIgnoreCase(String loginEmail);
 
     // Проверка наличия логина
     boolean existsByUsername(String loginEmail);

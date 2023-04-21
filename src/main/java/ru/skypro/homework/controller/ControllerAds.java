@@ -96,19 +96,6 @@ public class ControllerAds {
     }
 
     // Обновить картинку объявления
-//    @PatchMapping("/{id}/image")
-//    public ResponseEntity<byte[]> updateAdImage(
-//            @PathVariable Long adid,
-//            @RequestParam("image") MultipartFile image
-//    ) {
-//        byte[] updatedImage = serviceAds.updateAdImage(adid, image);
-//        if (updatedImage == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//        return new ResponseEntity<>(updatedImage, headers, HttpStatus.OK);
-//    }
     @PreAuthorize("adsServiceImpl.getAdsById(#id).getEmail()" +
             "== authentication.principal.username or hasRole('ROLE_ADMIN')")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

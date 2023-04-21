@@ -55,7 +55,7 @@ public class ServiceAds {
             image.setBytes(imageFile.getBytes());
             repositoryImage.save(image);
             ads.setAdImage(image);
-            ads.setUsers(repositoryUsers.findByUsername("Asd@Asd.com"
+            ads.setUsers(repositoryUsers.findByUsernameIgnoreCase("Asd@Asd.com"
                     // authentication.getName()
             ));
             repositoryAds.save(ads);
@@ -125,10 +125,10 @@ public class ServiceAds {
         }
     }
 
+    // Возврат фото
     public byte[] getImage(Long id) {
-        Ads ads = repositoryAds.findById(id).orElseThrow(MarketNotFoundException::new);
-//        return repositoryImage.findById(id);
-        return ads.getAdImage().getBytes();
+        return repositoryImage.findById(id)
+                .orElseThrow(MarketNotFoundException::new).getBytes();
     }
 }
 
