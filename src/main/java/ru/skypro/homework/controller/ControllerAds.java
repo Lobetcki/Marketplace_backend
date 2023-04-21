@@ -1,9 +1,9 @@
 package ru.skypro.homework.controller;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +12,9 @@ import ru.skypro.homework.dto.adsDTO.AdsFullDTO;
 import ru.skypro.homework.dto.adsDTO.CreateAdsDTO;
 import ru.skypro.homework.dto.adsDTO.ResponseWrapperAdsDTO;
 import ru.skypro.homework.service.ServiceAds;
+
+import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/ads")
@@ -42,11 +45,13 @@ public class ControllerAds {
     }
 
     // Добавить объявление
-    @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdsDTO> createAd(@RequestBody CreateAdsDTO createAdsDTO,
-                                           @RequestParam MultipartFile image,
-                                           Authentication authentication) {
-        AdsDTO adsDTO = serviceAds.createAd(authentication, createAdsDTO, image);
+//    @PostMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AdsDTO> createAd(@RequestPart("properties") CreateAdsDTO createAdsDTO,
+                                           @Valid
+                                           @RequestPart("image") MultipartFile imageFile,
+                                           Authentication authentication) throws IOException {
+        AdsDTO adsDTO = serviceAds.createAd(createAdsDTO, imageFile, authentication);
         return ResponseEntity.status(HttpStatus.CREATED).body(adsDTO);
     }
 
@@ -61,6 +66,8 @@ public class ControllerAds {
     }
 
     // Удалить объявление
+    @PreAuthorize("adsServiceImpl.getAdsById(#id).getEmail()" +
+            "== authentication.principal.username or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAd(@PathVariable Long id) {
         serviceAds.deleteAd(id);
@@ -89,16 +96,25 @@ public class ControllerAds {
     }
 
     // Обновить картинку объявления
-    @PatchMapping("/{id}/image")
-    public ResponseEntity<byte[]> updateAdImage(
-            @PathVariable Long adid,
-            @RequestParam("image") MultipartFile image) {
-        byte[] updatedImage = serviceAds.updateAdImage(adid, image);
-        if (updatedImage == null) {
-            return ResponseEntity.notFound().build();
-        }
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        return new ResponseEntity<>(updatedImage, headers, HttpStatus.OK);
+//    @PatchMapping("/{id}/image")
+//    public ResponseEntity<byte[]> updateAdImage(
+//            @PathVariable Long adid,
+//            @RequestParam("image") MultipartFile image
+//    ) {
+//        byte[] updatedImage = serviceAds.updateAdImage(adid, image);
+//        if (updatedImage == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//        return new ResponseEntity<>(updatedImage, headers, HttpStatus.OK);
+//    }
+    @PreAuthorize("adsServiceImpl.getAdsById(#id).getEmail()" +
+            "== authentication.principal.username or hasRole('ROLE_ADMIN')")
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<byte[]> updateAdImage(@PathVariable Long adid,
+                                                @RequestParam MultipartFile imageFile) {
+
+        return ResponseEntity.ok(serviceAds.updateAdImage(adid, imageFile));
     }
 }

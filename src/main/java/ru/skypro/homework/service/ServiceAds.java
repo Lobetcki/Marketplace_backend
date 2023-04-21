@@ -45,19 +45,26 @@ public class ServiceAds {
     }
 
     // Добавить объявление
-    public AdsDTO createAd(Authentication authentication,
-                           CreateAdsDTO createAdsDTO,
-                           MultipartFile image) {
+    public AdsDTO createAd(CreateAdsDTO createAdsDTO,
+                           MultipartFile imageFile,
+                           Authentication authentication) {
+        try {
             Ads ads = createAdsDTO.toAds();
-            Image imageAds = serviceImage.toImage(image);
-//            byte[] bytes = ;
-            ads.setAdImage(imageAds);
+//            Image imageAds = serviceImage.toImage(image);
+            Image image = new Image();
+            image.setBytes(imageFile.getBytes());
+            repositoryImage.save(image);
+            ads.setAdImage(image);
             ads.setUsers(repositoryUsers.findByUsername("Asd@Asd.com"
                     // authentication.getName()
             ));
             repositoryAds.save(ads);
-            ads = repositoryAds.findByTitle(createAdsDTO.getTitle());
+            System.out.println(ads.getId());
+//            ads = repositoryAds.findByTitle(createAdsDTO.getTitle());
             return AdsDTO.fromDTO(ads);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // Поиск объявлений по названию
@@ -101,7 +108,20 @@ public class ServiceAds {
     }
 
     // Обновить картинку объявления
-    public byte[] updateAdImage(Long id, MultipartFile image) {
+    public byte[] updateAdImage(Long id, MultipartFile imageFile) {
+        try {
+//            Users user = repositoryUsers.findByUsername("Asd@Asd.com");
+            repositoryImage.deleteById(String.valueOf(id));
+            Image image = new Image();
+            image.setBytes(avatarUser.getBytes());
+            user.setUserImage(image);
+            repositoryImage.save(image);
+            Long imageUrl = image.getUrl();
+            repositoryUsers.save(user);
+            return "https://avatar/" + imageUrl;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 }

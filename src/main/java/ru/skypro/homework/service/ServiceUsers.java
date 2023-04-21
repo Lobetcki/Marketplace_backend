@@ -92,12 +92,11 @@ public class ServiceUsers {
             image.setBytes(avatarUser.getBytes());
             user.setUserImage(image);
             repositoryImage.save(image);
-            Long imageUrl = image.getUrl();
+//            Long imageUrl = ;
             repositoryUsers.save(user);
-            return "https://avatar/" + imageUrl;
+            return "https://avatar/" + image.getUrl();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 }

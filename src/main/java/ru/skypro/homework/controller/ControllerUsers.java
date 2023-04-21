@@ -58,8 +58,7 @@ public class ControllerUsers {
     @PatchMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadAvatarUser(
             @RequestParam MultipartFile avatarUser,
-            Authentication authentication
-    ) {
+            Authentication authentication) {
         return ResponseEntity.ok(serviceUsers.uploadAvatar(avatarUser, authentication));
     }
 }
