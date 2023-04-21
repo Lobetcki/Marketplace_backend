@@ -8,11 +8,11 @@ import ru.skypro.homework.model.Users;
 @Setter
 public class UserDTO {
     private Long Id;
-    private String username;
+    private String email;
     private String firstName;
     private String lastName;
     private String phone;
-    private String userImageUrl;
+    private String image;
 
     public static UserDTO fromDTO(Users users) {
         UserDTO userDTO = new UserDTO();
@@ -20,22 +20,13 @@ public class UserDTO {
         userDTO.setFirstName(users.getFirstName());
         userDTO.setLastName(users.getLastName());
         userDTO.setPhone(users.getPhone());
-        userDTO.setUsername(users.getUsername());
+        userDTO.setEmail(users.getUsername());
         if (users.getUserImage() == null) {
-            userDTO.setUserImageUrl("No image");
+            userDTO.setImage("No image");
         } else {
-            userDTO.setUserImageUrl("/ads/image/"
+            userDTO.setImage("/ads/image/"
                     + users.getUserImage().getId());
         }
         return userDTO;
-    }
-
-    public Users toUser(Users users) {
-        users.setId(this.getId());
-        users.setFirstName(this.getFirstName());
-        users.setLastName(this.getLastName());
-        users.setPhone(this.getPhone());
-        users.setUsername(this.getUsername());
-        return users;
     }
 }

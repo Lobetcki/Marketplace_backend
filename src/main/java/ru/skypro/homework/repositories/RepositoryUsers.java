@@ -9,8 +9,8 @@ import ru.skypro.homework.model.Users;
 public interface RepositoryUsers extends JpaRepository<Users, Long> {
 
     @Modifying
-    @Query("UPDATE Users u SET u.password = :newPassword WHERE u.username = :username")
-    boolean passwordUpdate(@Param("newPassword") String newPassword, @Param("username") String username);
+    @Query(value = "UPDATE users u SET password = ?1 WHERE u.username = ?2", nativeQuery = true)
+    void passwordUpdate(String newPassword, String username);
 
     // Получить информацию об авторизованном пользователе
     Users findByUsernameIgnoreCase(String loginEmail);

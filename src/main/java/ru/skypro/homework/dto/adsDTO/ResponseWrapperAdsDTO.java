@@ -8,13 +8,13 @@ import java.util.List;
 @Getter
 @Setter
 public class ResponseWrapperAdsDTO {
-    private Integer countAds;
-    private List<AdsDTO> adsDTOList;
+    private Integer count;
+    private List<AdsDTO> results;
 
     public static ResponseWrapperAdsDTO fromDTO(List<AdsDTO> list) {
         ResponseWrapperAdsDTO result = new ResponseWrapperAdsDTO();
-        result.setAdsDTOList(list);
-        result.setCountAds(list.size());
+        result.setResults(list);
+        result.setCount(list.size());
         return result;
     }
 }

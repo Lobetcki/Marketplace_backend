@@ -38,7 +38,7 @@ public class ServiceAds {
     // Получить все объявления
     public ResponseWrapperAdsDTO getAllAds() {
         ResponseWrapperAdsDTO wrAdsDTO = new ResponseWrapperAdsDTO();
-        wrAdsDTO.setAdsDTOList(repositoryAds.findAll()
+        wrAdsDTO.setResults(repositoryAds.findAll()
                 .stream().map(AdsDTO::fromDTO)
                 .collect(Collectors.toList()));
         return wrAdsDTO;

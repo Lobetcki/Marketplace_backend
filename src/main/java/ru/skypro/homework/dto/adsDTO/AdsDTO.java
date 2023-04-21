@@ -6,8 +6,8 @@ import ru.skypro.homework.model.Ads;
 @Data
 public class AdsDTO {
 
-    private Long authorId;
-    private String imageAdUrl;
+    private Long author;
+    private String image;
     private Long pk;
     private Integer price;
     private String title;
@@ -15,14 +15,14 @@ public class AdsDTO {
     public static AdsDTO fromDTO(Ads ads) {
         AdsDTO adsDTO = new AdsDTO();
 
-        adsDTO.setAuthorId(ads.getUsers().getId());
+        adsDTO.setAuthor(ads.getUsers().getId());
         adsDTO.setPk(ads.getId());
         adsDTO.setPrice(ads.getPrice());
         adsDTO.setTitle(ads.getTitle());
         if (ads.getAdImage() == null) {
-            adsDTO.setImageAdUrl("No image");
+            adsDTO.setImage("No image");
         } else {
-            adsDTO.setImageAdUrl("/ads/image/"
+            adsDTO.setImage("/ads/image/"
                     + ads.getAdImage().getId());
         }
         return adsDTO;

@@ -9,7 +9,6 @@ import ru.skypro.homework.dto.RegisterReq;
 import ru.skypro.homework.repositories.RepositoryUsers;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.MyUserDetailsManager;
-import ru.skypro.homework.service.ServiceUsers;
 
 @Service
 @Transactional
@@ -20,23 +19,21 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final RepositoryUsers repositoryUsers;
 
-    public AuthServiceImpl(MyUserDetailsManager manager,
-                           PasswordEncoder passwordEncoder,
-                           ServiceUsers serviceUser, RepositoryUsers repositoryUsers) {
+    public AuthServiceImpl(MyUserDetailsManager manager, PasswordEncoder passwordEncoder, RepositoryUsers repositoryUsers) {
         this.userDetailsManager = manager;
-        this.encoder = passwordEncoder;;
+        this.encoder = passwordEncoder;
+        ;
         this.repositoryUsers = repositoryUsers;
     }
+
     // Авторизация пользователя
     @Override
     public boolean login(String userName, String password) {
         if (!userDetailsManager.userExists(userName)) {
             return false;
         }
-        UserDetails userDetails = userDetailsManager
-                .loadUserByUsername(userName);
-        return encoder.matches(password,
-                userDetails.getPassword());
+        UserDetails userDetails = userDetailsManager.loadUserByUsername(userName);
+        return encoder.matches(password, userDetails.getPassword());
     }
 
     // Регистрация пользователя

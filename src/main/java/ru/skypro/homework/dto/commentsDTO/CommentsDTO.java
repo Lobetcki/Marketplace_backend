@@ -17,7 +17,6 @@ public class CommentsDTO {
     public Long pk;
     public String text;
 
-
     public static CommentsDTO fromCommentsDTO(Comments comments) {
         CommentsDTO commentsDTO = new CommentsDTO();
         commentsDTO.setAuthor(comments.getUsers().getId());

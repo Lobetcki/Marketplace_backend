@@ -42,15 +42,13 @@ public class ServiceUsers {
                 || newPasswordDTO.getNewPassword().isBlank()) {
             throw new InvalidParametersExeption();
         }
-        if (encoder.matches(newPasswordDTO.getCurrentPassword(),
-                manager.loadUserByUsername(authentication.getName()).getPassword())) {
+        if (!(encoder.matches(newPasswordDTO.getCurrentPassword(),
+                (manager.loadUserByUsername(authentication.getName()).getPassword())))) {
             throw new InvalidParametersExeption();
         }
-        if (repositoryUsers.passwordUpdate(newPasswordDTO.getNewPassword(),
-                                            authentication.getName())) {
-            return true;
-        }
-        return false;
+        repositoryUsers.passwordUpdate(encoder.encode(newPasswordDTO.getNewPassword()),
+                                        authentication.getName());
+        return true;
     }
 
     // Получить информацию об авторизованном пользователе
@@ -66,8 +64,11 @@ public class ServiceUsers {
     public UserDTO updateUsersDTO(UserDTO userDTO, Authentication authentication) {
         Users users = repositoryUsers
                 .findByUsernameIgnoreCase(authentication.getName());
-        repositoryUsers.save(userDTO.toUser(users));
-        return userDTO;
+        users.setFirstName(userDTO.getFirstName());
+        users.setLastName(userDTO.getLastName());
+        users.setPhone(userDTO.getPhone());
+        repositoryUsers.save(users);
+        return UserDTO.fromDTO(users);
     }
 
 
@@ -76,7 +77,9 @@ public class ServiceUsers {
                                Authentication authentication) {
         try {
             Users user = repositoryUsers.findByUsernameIgnoreCase(authentication.getName());
-            repositoryImage.delete(user.getUserImage());
+           if (user.getUserImage() != null) {
+               repositoryImage.delete(user.getUserImage());
+           }
             Image image = new Image();
             image.setBytes(avatarUser.getBytes());
             repositoryImage.save(image);

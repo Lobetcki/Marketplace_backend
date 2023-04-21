@@ -26,9 +26,6 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private Authorities authorities;
-
     @OneToOne(cascade = CascadeType.ALL)
     private Image userImage;
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)

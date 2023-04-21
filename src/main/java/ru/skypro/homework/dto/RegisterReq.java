@@ -11,7 +11,6 @@ import java.util.List;
 
 @Data
 public class RegisterReq implements UserDetails {
-
     private String username;
     private String password;
     private String firstName;
