@@ -62,25 +62,11 @@ public class ServiceUsers {
         return UserDTO.fromDTO(user);
     }
 
-//    public Users saveUser(RegisterReq registerReq) {
-////        Users users = repositoryUsers.findByUsername(registerReq.getUsername());
-//        Users users = new Users();
-//        users.setUsername(registerReq.getUsername());
-//        users.setPassword(registerReq.getPassword());
-//        users.setRole(registerReq.getRole());
-//        users.setFirstName(registerReq.getFirstName());
-//        users.setLastName(registerReq.getLastName());
-//        users.setPhone(registerReq.getPhone());
-//        repositoryUsers.save(users);
-//        return users;
-//    }
-
     // Обновить информацию об авторизованном пользователе
-    public UserDTO updateUsersDTO(UserDTO userDTO) {
+    public UserDTO updateUsersDTO(UserDTO userDTO, Authentication authentication) {
         Users users = repositoryUsers
-                .findByUsernameIgnoreCase(userDTO.getUsername());
-        userDTO.toUser(users);
-        repositoryUsers.save(users);
+                .findByUsernameIgnoreCase(authentication.getName());
+        repositoryUsers.save(userDTO.toUser(users));
         return userDTO;
     }
 
@@ -89,7 +75,7 @@ public class ServiceUsers {
     public String uploadAvatar(MultipartFile avatarUser,
                                Authentication authentication) {
         try {
-            Users user = repositoryUsers.findByUsernameIgnoreCase("Asd@Asd.com");
+            Users user = repositoryUsers.findByUsernameIgnoreCase(authentication.getName());
             repositoryImage.delete(user.getUserImage());
             Image image = new Image();
             image.setBytes(avatarUser.getBytes());

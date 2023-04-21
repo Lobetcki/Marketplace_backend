@@ -1,13 +1,11 @@
 package ru.skypro.homework.service.impl;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.RegisterReq;
-import ru.skypro.homework.model.Users;
 import ru.skypro.homework.repositories.RepositoryUsers;
 import ru.skypro.homework.service.AuthService;
 import ru.skypro.homework.service.MyUserDetailsManager;
@@ -20,15 +18,13 @@ public class AuthServiceImpl implements AuthService {
 
     private final MyUserDetailsManager userDetailsManager;
     private final PasswordEncoder encoder;
-    private final ServiceUsers serviceUsers;
     private final RepositoryUsers repositoryUsers;
 
     public AuthServiceImpl(MyUserDetailsManager manager,
                            PasswordEncoder passwordEncoder,
                            ServiceUsers serviceUser, RepositoryUsers repositoryUsers) {
         this.userDetailsManager = manager;
-        this.encoder = passwordEncoder;
-        this.serviceUsers = serviceUser;
+        this.encoder = passwordEncoder;;
         this.repositoryUsers = repositoryUsers;
     }
     // Авторизация пользователя

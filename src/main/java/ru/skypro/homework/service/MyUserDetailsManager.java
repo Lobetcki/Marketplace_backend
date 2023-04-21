@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.RegisterReq;
-import ru.skypro.homework.model.Users;
 import ru.skypro.homework.repositories.RepositoryUsers;
 
 @Service
