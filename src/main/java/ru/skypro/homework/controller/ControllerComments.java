@@ -1,6 +1,7 @@
 package ru.skypro.homework.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.commentsDTO.CommentsDTO;
 import ru.skypro.homework.dto.commentsDTO.ResponseWrapperCommentDTO;
@@ -27,8 +28,9 @@ public class ControllerComments {
     // Добавить комментарий к объявлению
     @PostMapping("/{id}/comments")
     public ResponseEntity<CommentsDTO> addComment(@PathVariable Long id,
-                                                  @RequestBody CommentsDTO commentDTO) {
-        CommentsDTO commentsDTO = serviceComments.addComment(id, commentDTO);
+                                                  @RequestBody CommentsDTO commentDTO,
+                                                  Authentication authentication) {
+        CommentsDTO commentsDTO = serviceComments.addComment(id, commentDTO, authentication);
         return ResponseEntity.ok(commentsDTO);
     }
 

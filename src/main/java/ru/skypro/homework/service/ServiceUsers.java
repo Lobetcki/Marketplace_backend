@@ -71,22 +71,17 @@ public class ServiceUsers {
         return UserDTO.fromDTO(users);
     }
 
-
     // Обновить аватар авторизованного пользователя
     public String uploadAvatar(MultipartFile avatarUser,
                                Authentication authentication) {
         try {
-            Users user = repositoryUsers.findByUsernameIgnoreCase(authentication.getName());
-           if (user.getUserImage() != null) {
-               repositoryImage.delete(user.getUserImage());
-           }
-            Image image = new Image();
+            Users users = repositoryUsers.findByUsernameIgnoreCase(authentication.getName());
+            Image image = repositoryImage.findById(users.getUserImage()
+                    .getId()).orElseThrow(MarketNotFoundException::new);
             image.setBytes(avatarUser.getBytes());
             repositoryImage.save(image);
-//            Long imageUrl = ;
-            user.setUserImage(image);
-            repositoryUsers.save(user);
-            return "/ads/image/" + image.getId();
+            repositoryUsers.save(users);
+            return "/ads/me/image/" + image.getId();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

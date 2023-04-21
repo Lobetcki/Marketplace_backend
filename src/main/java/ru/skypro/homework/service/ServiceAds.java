@@ -10,6 +10,7 @@ import ru.skypro.homework.dto.adsDTO.ResponseWrapperAdsDTO;
 import ru.skypro.homework.exception.MarketNotFoundException;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Image;
+import ru.skypro.homework.model.Users;
 import ru.skypro.homework.repositories.RepositoryAds;
 import ru.skypro.homework.repositories.RepositoryImage;
 import ru.skypro.homework.repositories.RepositoryUsers;
@@ -44,32 +45,12 @@ public class ServiceAds {
         return wrAdsDTO;
     }
 
-    // Добавить объявление
-    public AdsDTO createAd(CreateAdsDTO createAdsDTO,
-                           MultipartFile imageFile,
-                           Authentication authentication) {
-        try {
-            Ads ads = createAdsDTO.toAds();
-//            Image imageAds = serviceImage.toImage(image);
-            Image image = new Image();
-            image.setBytes(imageFile.getBytes());
-            repositoryImage.save(image);
-            ads.setAdImage(image);
-            ads.setUsers(repositoryUsers.findByUsernameIgnoreCase("Asd@Asd.com"
-                    // authentication.getName()
-            ));
-            repositoryAds.save(ads);
-            System.out.println(ads.getId());
-//            ads = repositoryAds.findByTitle(createAdsDTO.getTitle());
-            return AdsDTO.fromDTO(ads);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
     // Поиск объявлений по названию
     public ResponseWrapperAdsDTO getAdsByTitle(String text) {
-        List<AdsDTO> list = repositoryAds.findByTitleContainingIgnoreCase(text)
+        List<AdsDTO> list = repositoryAds
+                .findByTitleContainingIgnoreCase(text)
                 .stream().map(AdsDTO::fromDTO)
                 .collect(Collectors.toList());
         return ResponseWrapperAdsDTO.fromDTO(list);
@@ -78,7 +59,8 @@ public class ServiceAds {
     // Получить информацию об объявлении
     public AdsFullDTO getAdById(Long id) {
         return AdsFullDTO.fromAdsFullDTO(
-                repositoryAds.findById(id).orElseThrow(MarketNotFoundException::new));
+                repositoryAds.findById(id)
+                        .orElseThrow(MarketNotFoundException::new));
     }
 
     // Удалить объявление
@@ -88,7 +70,8 @@ public class ServiceAds {
 
     // Обновить информацию об объявлении
     public AdsDTO updateAd(Long id, CreateAdsDTO createAdsDTO) {
-        Ads ads = repositoryAds.findById(id).orElseThrow(MarketNotFoundException::new);
+        Ads ads = repositoryAds.findById(id)
+                .orElseThrow(MarketNotFoundException::new);
         ads.setDescription(createAdsDTO.getDescription());
         ads.setPrice(createAdsDTO.getPrice());
         ads.setTitle(createAdsDTO.getTitle());
@@ -99,30 +82,55 @@ public class ServiceAds {
     // Получить объявления авторизованного пользователя
     public ResponseWrapperAdsDTO getAdsByCurrentUser(
             Authentication authentication) {
-//        Users user = repositoryUsers.findByUsername("Asd@Asd.com");
-
-        List<AdsDTO> adsList = repositoryAds.findAllByUsers_Username("Asd@Asd.com")
+//        Users user = repositoryUsers.findByUsernameIgnoreCase(authentication.getName());
+        List<AdsDTO> adsList = repositoryAds
+                .findAllByUsers_Username(authentication.getName())
                 .stream().map(AdsDTO::fromDTO)
                 .collect(Collectors.toList());
         return ResponseWrapperAdsDTO.fromDTO(adsList);
     }
 
     // Обновить картинку объявления
-    public byte[] updateAdImage(Long id, MultipartFile imageFile) {
+    public Image updateAdImage(Long id, MultipartFile imageFile) {
         try {
-            Ads ads = repositoryAds.findById(id).orElseThrow(MarketNotFoundException::new);
-            repositoryImage.delete(ads.getAdImage());
+//            Ads ads = repositoryAds.findById(id)
+//                    .orElseThrow(MarketNotFoundException::new);
+//
+//            if (ads.getAdImage() != null) {
+//                repositoryImage.delete(ads.getAdImage());
+//            }
             Image image = new Image();
             image.setBytes(imageFile.getBytes());
             repositoryImage.save(image);
 //            Long imageUrl = ;
-            ads.setAdImage(image);
-            repositoryAds.save(ads);
+//            ads.setAdImage(image);
+//            repositoryAds.save(ads);
+            repositoryAds.updateAdImage(id, image.getId());
 
-            return image.getBytes();
+            return image;
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // Добавить объявление
+    public AdsDTO createAd(CreateAdsDTO createAdsDTO,
+                           MultipartFile imageFile,
+                           Authentication authentication) {
+            Ads ads = createAdsDTO.toAds();
+//            Image image = new Image();
+//            image.setBytes(imageFile.getBytes());
+//            repositoryImage.save(image);
+            ads.setUsers(repositoryUsers
+                    .findByUsernameIgnoreCase(authentication.getName()));
+
+            ads.setAdImage(updateAdImage(createAdsDTO.toAds().getId(),
+                            imageFile));
+
+            repositoryAds.save(ads);
+
+            return AdsDTO.fromDTO(ads);
     }
 
     // Возврат фото

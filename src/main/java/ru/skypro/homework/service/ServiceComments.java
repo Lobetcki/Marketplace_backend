@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.commentsDTO.CommentsDTO;
 import ru.skypro.homework.dto.commentsDTO.ResponseWrapperCommentDTO;
@@ -8,6 +9,7 @@ import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Comments;
 import ru.skypro.homework.repositories.RepositoryAds;
 import ru.skypro.homework.repositories.RepositoryComments;
+import ru.skypro.homework.repositories.RepositoryUsers;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -19,13 +21,14 @@ public class ServiceComments {
 
     private final RepositoryComments repositoryComments;
     private final RepositoryAds repositoryAds;
+    private final RepositoryUsers repositoryUsers;
 
     public ServiceComments(RepositoryComments repositoryComments,
-                           RepositoryAds repositoryAds) {
+                           RepositoryAds repositoryAds, RepositoryUsers repositoryUsers) {
         this.repositoryComments = repositoryComments;
         this.repositoryAds = repositoryAds;
+        this.repositoryUsers = repositoryUsers;
     }
-
 
     // Получить комментарии объявления
     public ResponseWrapperCommentDTO getCommentsByAdId(Long id) {
@@ -36,17 +39,17 @@ public class ServiceComments {
     }
 
     // Добавить комментарий к объявлению
-    public CommentsDTO addComment(Long adId, CommentsDTO commentDTO) {
-        Ads ads = repositoryAds.findById(adId).orElseThrow(MarketNotFoundException::new);
-        if (ads == null) {
-            throw new MarketNotFoundException();
-        }
+    public CommentsDTO addComment(Long adId,
+                                  CommentsDTO commentDTO,
+                                  Authentication authentication) {
+        Ads ads = repositoryAds.findById(adId)
+                .orElseThrow(MarketNotFoundException::new);
         Comments comments = commentDTO.toComments();
         comments.setAds(ads);
-        comments.setUsers(ads.getUsers());
+        comments.setUsers(repositoryUsers.findByUsernameIgnoreCase(
+                                            authentication.getName()));
         repositoryComments.save(comments);
-        return CommentsDTO.fromCommentsDTO(
-                repositoryComments.findByText(commentDTO.getText()));
+        return CommentsDTO.fromCommentsDTO(comments);
     }
 
     // Удалить комментарий

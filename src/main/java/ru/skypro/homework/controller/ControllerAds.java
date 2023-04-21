@@ -45,8 +45,7 @@ public class ControllerAds {
     }
 
     // Добавить объявление
-//    @PostMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PostMapping(value = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDTO> createAd(@RequestPart("properties") CreateAdsDTO createAdsDTO,
                                            @Valid
                                            @RequestPart("image") MultipartFile imageFile,
@@ -102,10 +101,11 @@ public class ControllerAds {
     public ResponseEntity<byte[]> updateAdImage(@PathVariable Long adid,
                                                 @RequestParam MultipartFile imageFile) {
 
-        return ResponseEntity.ok(serviceAds.updateAdImage(adid, imageFile));
+        return ResponseEntity.ok(serviceAds.updateAdImage(adid, imageFile).getBytes());
     }
 
-    @GetMapping(value = "/images/{id}/", produces = {MediaType.IMAGE_PNG_VALUE})
+    // Вернуть аватарку объявления
+    @GetMapping(value = "/me/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
     public byte[] getImage(@PathVariable("id") Long id) throws IOException {
         return serviceAds.getImage(id);
     }

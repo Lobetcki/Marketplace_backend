@@ -22,7 +22,7 @@ public class AdsDTO {
         if (ads.getAdImage() == null) {
             adsDTO.setImage("No image");
         } else {
-            adsDTO.setImage("/ads/image/"
+            adsDTO.setImage("/ads/me/image/"
                     + ads.getAdImage().getId());
         }
         return adsDTO;

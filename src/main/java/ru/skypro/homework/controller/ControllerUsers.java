@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.userDTO.NewPasswordDTO;
 import ru.skypro.homework.dto.userDTO.UserDTO;
+import ru.skypro.homework.service.ServiceAds;
 import ru.skypro.homework.service.ServiceUsers;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/users")
@@ -20,9 +23,10 @@ import ru.skypro.homework.service.ServiceUsers;
 public class ControllerUsers {
 
     private final ServiceUsers serviceUsers;
-
-    public ControllerUsers(ServiceUsers serviceUsers) {
+    private final ServiceAds serviceAds;
+    public ControllerUsers(ServiceUsers serviceUsers, ServiceAds serviceAds) {
         this.serviceUsers = serviceUsers;
+        this.serviceAds = serviceAds;
     }
 
     @PostMapping("/set_password")
@@ -95,9 +99,10 @@ public class ControllerUsers {
             }
     )
     public ResponseEntity<String> uploadAvatarUser(
-            @RequestParam MultipartFile avatarUser,
+            @RequestParam("image") MultipartFile avatarUser,
             Authentication authentication) {
-        return ResponseEntity.ok(serviceUsers.uploadAvatar(avatarUser, authentication));
+        return ResponseEntity.ok(serviceUsers.uploadAvatar(
+                avatarUser, authentication));
     }
 }
 

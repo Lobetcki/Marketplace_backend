@@ -28,7 +28,7 @@ public class AdsFullDTO {
         if (ads.getAdImage() == null) {
             adsFullDTO.setImage("No image");
         } else {
-            adsFullDTO.setImage("/ads/image/"
+            adsFullDTO.setImage("/ads/me/image/"
                     + ads.getAdImage().getId());
         }
         adsFullDTO.setEmail(ads.getUsers().getUsername());
