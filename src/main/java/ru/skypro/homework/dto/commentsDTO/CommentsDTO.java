@@ -21,8 +21,8 @@ public class CommentsDTO {
     public static CommentsDTO fromCommentsDTO(Comments comments) {
         CommentsDTO commentsDTO = new CommentsDTO();
         commentsDTO.setAuthor(comments.getUsers().getId());
-        commentsDTO.setAuthorImage("https://avatar/"
-                + comments.getUsers().getUserImage().getUrl());
+        commentsDTO.setAuthorImage("/ads/image/"
+                + comments.getUsers().getUserImage().getId());
         commentsDTO.setAuthorFirstName(comments.getUsers().getFirstName());
         commentsDTO.setCreatedAt(comments.getCreatedAtDate());
         commentsDTO.setPk(comments.getId());

@@ -22,8 +22,8 @@ public class AdsDTO {
         if (ads.getAdImage() == null) {
             adsDTO.setImageAdUrl("No image");
         } else {
-            adsDTO.setImageAdUrl("https://avatar/"
-                    + ads.getAdImage().getUrl());
+            adsDTO.setImageAdUrl("/ads/image/"
+                    + ads.getAdImage().getId());
         }
         return adsDTO;
     }

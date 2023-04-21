@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.skypro.homework.exception.InvalidParametersExeption;
 import ru.skypro.homework.exception.UnauthorizedExeption;
-import ru.skypro.homework.exception.UsersNotFoundException;
+import ru.skypro.homework.exception.MarketNotFoundException;
 
 @ControllerAdvice
 public class NotFoundPasteController {
-    @ExceptionHandler(UsersNotFoundException.class)
+    @ExceptionHandler(MarketNotFoundException.class)
     public ResponseEntity<?> notFound() {
         return ResponseEntity.status(404).body("Not Found");
     }

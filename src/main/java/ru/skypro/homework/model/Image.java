@@ -11,7 +11,7 @@ public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long url;
+    private Long id;
     @Lob
     @Type(type = "org.hibernate.type.BinaryType")
     private byte[] bytes;

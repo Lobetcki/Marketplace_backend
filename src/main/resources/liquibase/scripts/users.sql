@@ -11,8 +11,8 @@ create table users
     phone           varchar(50),
     role            varchar(50),
     enabled         boolean,
-    user_image_url  bigint,
+    user_image_id  bigint,
     primary key (id),
-    foreign key (user_image_url) references image(url)
+    foreign key (user_image_id) references image(id)
 );
 

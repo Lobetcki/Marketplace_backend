@@ -24,8 +24,8 @@ public class UserDTO {
         if (users.getUserImage() == null) {
             userDTO.setUserImageUrl("No image");
         } else {
-            userDTO.setUserImageUrl("https://avatar/"
-                    + users.getUserImage().getUrl());
+            userDTO.setUserImageUrl("/ads/image/"
+                    + users.getUserImage().getId());
         }
         return userDTO;
     }

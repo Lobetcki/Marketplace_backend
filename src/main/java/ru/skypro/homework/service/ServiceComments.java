@@ -3,7 +3,7 @@ package ru.skypro.homework.service;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.commentsDTO.CommentsDTO;
 import ru.skypro.homework.dto.commentsDTO.ResponseWrapperCommentDTO;
-import ru.skypro.homework.exception.UsersNotFoundException;
+import ru.skypro.homework.exception.MarketNotFoundException;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Comments;
 import ru.skypro.homework.repositories.RepositoryAds;
@@ -37,9 +37,9 @@ public class ServiceComments {
 
     // Добавить комментарий к объявлению
     public CommentsDTO addComment(Long adId, CommentsDTO commentDTO) {
-        Ads ads = repositoryAds.findById(adId).orElseThrow(UsersNotFoundException::new);
+        Ads ads = repositoryAds.findById(adId).orElseThrow(MarketNotFoundException::new);
         if (ads == null) {
-            throw new UsersNotFoundException();
+            throw new MarketNotFoundException();
         }
         Comments comments = commentDTO.toComments();
         comments.setAds(ads);
@@ -52,7 +52,7 @@ public class ServiceComments {
     // Удалить комментарий
     public boolean deleteComment(Long adId, Long commentId) {
         Comments comments = repositoryComments.findByIdAndAdsId(commentId, adId)
-                .orElseThrow(UsersNotFoundException::new);
+                .orElseThrow(MarketNotFoundException::new);
         repositoryComments.delete(comments);
         return true;
     }
@@ -61,7 +61,7 @@ public class ServiceComments {
     public CommentsDTO updateComment(Long adId, Long commentId,
                                      CommentsDTO commentDTO) {
         Comments comments = repositoryComments.findByIdAndAdsId(commentId, adId)
-                .orElseThrow(UsersNotFoundException::new);
+                .orElseThrow(MarketNotFoundException::new);
         comments.setText(commentDTO.getText());
         repositoryComments.save(comments);
         return commentDTO;

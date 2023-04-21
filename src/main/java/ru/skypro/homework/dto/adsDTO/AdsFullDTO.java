@@ -28,8 +28,8 @@ public class AdsFullDTO {
         if (ads.getAdImage() == null) {
             adsFullDTO.setAdImageUrl("No image");
         } else {
-            adsFullDTO.setAdImageUrl("https://avatar/"
-                    + ads.getAdImage().getUrl());
+            adsFullDTO.setAdImageUrl("/ads/image/"
+                    + ads.getAdImage().getId());
         }
         adsFullDTO.setUsername(ads.getUsers().getUsername());
         adsFullDTO.setAuthorFirstName(ads.getUsers().getFirstName());

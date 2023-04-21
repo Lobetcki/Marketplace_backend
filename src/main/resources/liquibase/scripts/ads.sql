@@ -7,9 +7,9 @@ create table ads
     description  text,
     price        integer,
     title        varchar(255) NOT NULL,
-    ad_image_url bigint,
+    ad_image_id bigint,
     users_id bigint NOT NULL,
     primary key (id),
-    foreign key (ad_image_url) references image(url),
+    foreign key (ad_image_id) references image(id),
     foreign key (users_id) references users(id)
 );

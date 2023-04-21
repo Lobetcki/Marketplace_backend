@@ -7,7 +7,7 @@ import ru.skypro.homework.dto.adsDTO.AdsDTO;
 import ru.skypro.homework.dto.adsDTO.AdsFullDTO;
 import ru.skypro.homework.dto.adsDTO.CreateAdsDTO;
 import ru.skypro.homework.dto.adsDTO.ResponseWrapperAdsDTO;
-import ru.skypro.homework.exception.UsersNotFoundException;
+import ru.skypro.homework.exception.MarketNotFoundException;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Image;
 import ru.skypro.homework.repositories.RepositoryAds;
@@ -26,13 +26,13 @@ public class ServiceAds {
     private final RepositoryAds repositoryAds;
     private final RepositoryUsers repositoryUsers;
     private final RepositoryImage repositoryImage;
-    private final ServiceImage serviceImage;
 
-    public ServiceAds(RepositoryAds repositoryAds, RepositoryUsers repositoryUsers, RepositoryImage repositoryImage, ServiceImage serviceImage) {
+    public ServiceAds(RepositoryAds repositoryAds,
+                      RepositoryUsers repositoryUsers,
+                      RepositoryImage repositoryImage) {
         this.repositoryAds = repositoryAds;
         this.repositoryUsers = repositoryUsers;
         this.repositoryImage = repositoryImage;
-        this.serviceImage = serviceImage;
     }
 
     // Получить все объявления
@@ -78,7 +78,7 @@ public class ServiceAds {
     // Получить информацию об объявлении
     public AdsFullDTO getAdById(Long id) {
         return AdsFullDTO.fromAdsFullDTO(
-                repositoryAds.findById(id).orElseThrow(UsersNotFoundException::new));
+                repositoryAds.findById(id).orElseThrow(MarketNotFoundException::new));
     }
 
     // Удалить объявление
@@ -88,7 +88,7 @@ public class ServiceAds {
 
     // Обновить информацию об объявлении
     public AdsDTO updateAd(Long id, CreateAdsDTO createAdsDTO) {
-        Ads ads = repositoryAds.findById(id).orElseThrow(UsersNotFoundException::new);
+        Ads ads = repositoryAds.findById(id).orElseThrow(MarketNotFoundException::new);
         ads.setDescription(createAdsDTO.getDescription());
         ads.setPrice(createAdsDTO.getPrice());
         ads.setTitle(createAdsDTO.getTitle());
@@ -110,19 +110,25 @@ public class ServiceAds {
     // Обновить картинку объявления
     public byte[] updateAdImage(Long id, MultipartFile imageFile) {
         try {
-//            Users user = repositoryUsers.findByUsername("Asd@Asd.com");
-            repositoryImage.deleteById(String.valueOf(id));
+            Ads ads = repositoryAds.findById(id).orElseThrow(MarketNotFoundException::new);
+            repositoryImage.delete(ads.getAdImage());
             Image image = new Image();
-            image.setBytes(avatarUser.getBytes());
-            user.setUserImage(image);
+            image.setBytes(imageFile.getBytes());
             repositoryImage.save(image);
-            Long imageUrl = image.getUrl();
-            repositoryUsers.save(user);
-            return "https://avatar/" + imageUrl;
+//            Long imageUrl = ;
+            ads.setAdImage(image);
+            repositoryAds.save(ads);
+
+            return image.getBytes();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return null;
+    }
+
+    public byte[] getImage(Long id) {
+        Ads ads = repositoryAds.findById(id).orElseThrow(MarketNotFoundException::new);
+//        return repositoryImage.findById(id);
+        return ads.getAdImage().getBytes();
     }
 }
 

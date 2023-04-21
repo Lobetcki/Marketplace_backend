@@ -90,11 +90,11 @@ public class ServiceUsers {
             repositoryImage.delete(user.getUserImage());
             Image image = new Image();
             image.setBytes(avatarUser.getBytes());
-            user.setUserImage(image);
             repositoryImage.save(image);
 //            Long imageUrl = ;
+            user.setUserImage(image);
             repositoryUsers.save(user);
-            return "https://avatar/" + image.getUrl();
+            return "/ads/image/" + image.getId();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

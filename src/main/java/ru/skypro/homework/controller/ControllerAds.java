@@ -117,4 +117,10 @@ public class ControllerAds {
 
         return ResponseEntity.ok(serviceAds.updateAdImage(adid, imageFile));
     }
+
+    @GetMapping(value = "/images/{id}/", produces = {MediaType.IMAGE_PNG_VALUE})
+    public byte[] getImage(@PathVariable("id") Long id) throws IOException {
+        return serviceAds.getImage(id);
+    }
+
 }
