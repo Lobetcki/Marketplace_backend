@@ -12,6 +12,7 @@ import ru.skypro.homework.repositories.RepositoryComments;
 import ru.skypro.homework.repositories.RepositoryUsers;
 
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,7 @@ public class ServiceComments {
                 .orElseThrow(MarketNotFoundException::new);
         Comments comments = commentDTO.toComments();
         comments.setAds(ads);
+        comments.setCreatedAtDate(Instant.now());
         comments.setUsers(repositoryUsers.findByUsernameIgnoreCase(
                                             authentication.getName()));
         repositoryComments.save(comments);
@@ -66,7 +68,9 @@ public class ServiceComments {
         Comments comments = repositoryComments.findByIdAndAdsId(commentId, adId)
                 .orElseThrow(MarketNotFoundException::new);
         comments.setText(commentDTO.getText());
+        commentDTO = CommentsDTO.fromCommentsDTO(comments);
         repositoryComments.save(comments);
+        System.out.println(commentDTO);
         return commentDTO;
     }
 }

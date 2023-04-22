@@ -1,5 +1,9 @@
 package ru.skypro.homework.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +15,7 @@ import ru.skypro.homework.dto.adsDTO.AdsDTO;
 import ru.skypro.homework.dto.adsDTO.AdsFullDTO;
 import ru.skypro.homework.dto.adsDTO.CreateAdsDTO;
 import ru.skypro.homework.dto.adsDTO.ResponseWrapperAdsDTO;
+import ru.skypro.homework.dto.userDTO.UserDTO;
 import ru.skypro.homework.service.ServiceAds;
 
 import javax.validation.Valid;
@@ -29,13 +34,30 @@ public class ControllerAds {
 
     // Получить все объявления
     @GetMapping
+    @Operation(
+            summary = "Получить все объявления", tags = "Объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "OK",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseWrapperAdsDTO.class))})
+            }
+    )
     public ResponseEntity<ResponseWrapperAdsDTO> getAllAds() {
         ResponseWrapperAdsDTO adsDTO = serviceAds.getAllAds();
         return ResponseEntity.ok(adsDTO);
     }
 
-    // Поиск объявлений по названию
     @GetMapping("/source")
+    @Operation(
+            summary = "Поиск объявлений по названию", tags = "Объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "OK",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseWrapperAdsDTO.class))})
+            }
+    )
     public ResponseEntity<ResponseWrapperAdsDTO> getAdsByTitle(
             @RequestParam() String text) {
         if (text == null || text.isBlank()) {
@@ -44,7 +66,18 @@ public class ControllerAds {
         return ResponseEntity.ok(serviceAds.getAdsByTitle(text));
     }
 
-    // Добавить объявление
+    @Operation(
+            summary = "Добавить объявление", tags = "Объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201", description = "Created",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CreateAdsDTO.class))}),
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
+            }
+    )
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDTO> createAd(@RequestPart("properties") CreateAdsDTO createAdsDTO,
                                            @Valid
@@ -54,7 +87,16 @@ public class ControllerAds {
         return ResponseEntity.status(HttpStatus.CREATED).body(adsDTO);
     }
 
-    // Получить информацию об объявлении
+    @Operation(
+            summary = "Получить информацию об объявлении", tags = "Объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "OK",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = AdsFullDTO.class))}),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
+            }
+    )
     @GetMapping("/{id}")
     public ResponseEntity<AdsFullDTO> getAdById(@PathVariable Long id) {
         AdsFullDTO adFullDTO = serviceAds.getAdById(id);
@@ -64,7 +106,15 @@ public class ControllerAds {
         return ResponseEntity.ok(adFullDTO);
     }
 
-    // Удалить объявление
+    @Operation(
+            summary = "Удалить объявление", tags = "Объявления",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content),
+                    @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
+            }
+    )
     @PreAuthorize("adsServiceImpl.getAdsById(#id).getEmail()" +
             "== authentication.principal.username or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
@@ -73,8 +123,21 @@ public class ControllerAds {
         return ResponseEntity.noContent().build();
     }
 
-    // Обновить информацию об объявлении
     @PatchMapping("/{id}")
+    @Operation(
+            summary = "Обновить информацию об объявлении",tags = "Объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "OK",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = CreateAdsDTO.class))}),
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
+            }
+    )
+    @PreAuthorize("adsServiceImpl.getAdsById(#id).getEmail()" +
+            "== authentication.principal.username or hasRole('ROLE_ADMIN')")
     public ResponseEntity<AdsDTO> updateAd(
             @PathVariable Long id,
             @RequestBody CreateAdsDTO createAdsDTO) {
@@ -85,8 +148,18 @@ public class ControllerAds {
         return ResponseEntity.ok(adsDTO);
     }
 
-    // Получить объявления авторизованного пользователя
     @GetMapping("/me")
+    @Operation(
+            summary = "Получить объявления авторизованного пользователя", tags = "Объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "OK",
+                            content = {@Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseWrapperAdsDTO.class))}),
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
+            }
+    )
     public ResponseEntity<ResponseWrapperAdsDTO> getAdsByCurrentUser(
             Authentication authentication
     ) {
@@ -94,17 +167,27 @@ public class ControllerAds {
         return ResponseEntity.ok(adsDTOs);
     }
 
-    // Обновить картинку объявления
+    @Operation(
+            summary = "Обновить картинку объявления",tags = "Объявления",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200", description = "OK",
+                            content = { @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = UserDTO.class))}),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
+            }
+    )
     @PreAuthorize("adsServiceImpl.getAdsById(#id).getEmail()" +
             "== authentication.principal.username or hasRole('ROLE_ADMIN')")
     @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<byte[]> updateAdImage(@PathVariable Long adid,
-                                                @RequestParam MultipartFile imageFile) {
+    public ResponseEntity<byte[]> updateAdImage(@PathVariable("id") Long adid,
+                                                @RequestParam("image") MultipartFile imageFile) {
 
         return ResponseEntity.ok(serviceAds.updateAdImage(adid, imageFile).getBytes());
     }
 
-    // Вернуть аватарку объявления
+    // Вернуть аватарку пользователя или картинку объявления
+    @Operation(hidden = true)
     @GetMapping(value = "/me/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
     public byte[] getImage(@PathVariable("id") Long id) throws IOException {
         return serviceAds.getImage(id);

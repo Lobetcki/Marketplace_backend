@@ -10,7 +10,6 @@ import ru.skypro.homework.dto.adsDTO.ResponseWrapperAdsDTO;
 import ru.skypro.homework.exception.MarketNotFoundException;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Image;
-import ru.skypro.homework.model.Users;
 import ru.skypro.homework.repositories.RepositoryAds;
 import ru.skypro.homework.repositories.RepositoryImage;
 import ru.skypro.homework.repositories.RepositoryUsers;
@@ -44,7 +43,6 @@ public class ServiceAds {
                 .collect(Collectors.toList()));
         return wrAdsDTO;
     }
-
 
 
     // Поиск объявлений по названию
@@ -82,7 +80,6 @@ public class ServiceAds {
     // Получить объявления авторизованного пользователя
     public ResponseWrapperAdsDTO getAdsByCurrentUser(
             Authentication authentication) {
-//        Users user = repositoryUsers.findByUsernameIgnoreCase(authentication.getName());
         List<AdsDTO> adsList = repositoryAds
                 .findAllByUsers_Username(authentication.getName())
                 .stream().map(AdsDTO::fromDTO)
@@ -93,22 +90,11 @@ public class ServiceAds {
     // Обновить картинку объявления
     public Image updateAdImage(Long id, MultipartFile imageFile) {
         try {
-//            Ads ads = repositoryAds.findById(id)
-//                    .orElseThrow(MarketNotFoundException::new);
-//
-//            if (ads.getAdImage() != null) {
-//                repositoryImage.delete(ads.getAdImage());
-//            }
             Image image = new Image();
             image.setBytes(imageFile.getBytes());
             repositoryImage.save(image);
-//            Long imageUrl = ;
-//            ads.setAdImage(image);
-//            repositoryAds.save(ads);
             repositoryAds.updateAdImage(id, image.getId());
-
             return image;
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -118,17 +104,13 @@ public class ServiceAds {
     public AdsDTO createAd(CreateAdsDTO createAdsDTO,
                            MultipartFile imageFile,
                            Authentication authentication) {
-            Ads ads = createAdsDTO.toAds();
-//            Image image = new Image();
-//            image.setBytes(imageFile.getBytes());
-//            repositoryImage.save(image);
-            ads.setUsers(repositoryUsers
-                    .findByUsernameIgnoreCase(authentication.getName()));
-
-            ads.setAdImage(updateAdImage(createAdsDTO.toAds().getId(),
-                            imageFile));
-            repositoryAds.save(ads);
-            return AdsDTO.fromDTO(ads);
+        Ads ads = createAdsDTO.toAds();
+        ads.setUsers(repositoryUsers
+                .findByUsernameIgnoreCase(authentication.getName()));
+        ads.setAdImage(updateAdImage(createAdsDTO.toAds().getId(),
+                imageFile));
+        repositoryAds.save(ads);
+        return AdsDTO.fromDTO(ads);
     }
 
     // Возврат фото
