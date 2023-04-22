@@ -32,7 +32,6 @@ public class ControllerAds {
         this.serviceAds = serviceAds;
     }
 
-    // Получить все объявления
     @GetMapping
     @Operation(
             summary = "Получить все объявления", tags = "Объявления",

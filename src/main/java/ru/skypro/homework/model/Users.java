@@ -3,7 +3,7 @@ package ru.skypro.homework.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import ru.skypro.homework.dto.Role;
+import ru.skypro.homework.Enams.Role;
 
 import javax.persistence.*;
 import java.util.List;

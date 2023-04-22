@@ -1,9 +1,12 @@
 package ru.skypro.homework.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.skypro.homework.Enams.Role;
+import ru.skypro.homework.cofig.GrantedAuthorityDeserializer;
 import ru.skypro.homework.model.Users;
 
 import java.util.Collection;
@@ -17,6 +20,9 @@ public class RegisterReq implements UserDetails {
     private String lastName;
     private String phone;
     private Role role;
+
+    @JsonDeserialize(using = GrantedAuthorityDeserializer.class)
+    private List<GrantedAuthority> authorities;
 
     public static RegisterReq fromRegisterReq(Users users) {
         RegisterReq registerReq = new RegisterReq();

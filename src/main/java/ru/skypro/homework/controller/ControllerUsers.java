@@ -21,10 +21,9 @@ import ru.skypro.homework.service.ServiceUsers;
 public class ControllerUsers {
 
     private final ServiceUsers serviceUsers;
-    private final ServiceAds serviceAds;
+
     public ControllerUsers(ServiceUsers serviceUsers, ServiceAds serviceAds) {
         this.serviceUsers = serviceUsers;
-        this.serviceAds = serviceAds;
     }
 
     @PostMapping("/set_password")

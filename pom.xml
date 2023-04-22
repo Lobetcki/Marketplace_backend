@@ -16,25 +16,25 @@
   <description>Application for managing ads</description>
   <properties>
     <java.version>11</java.version>
-    <org.mapstruct.version>1.5.4.Final</org.mapstruct.version>
+    <org.springdoc.version>1.6.15</org.springdoc.version>
+    <org.liquibase.version>4.21.1</org.liquibase.version>
+    <org.junit.jupiter.version>5.9.2</org.junit.jupiter.version>
+    <org.mockito.version>5.2.0</org.mockito.version>
   </properties>
-  <dependencies>
 
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
-      <version>${org.mapstruct.version}</version>
-    </dependency>
+  <dependencies>
 
     <!--suppress VulnerableLibrariesLocal -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
@@ -45,16 +45,19 @@
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
     </dependency>
+
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
     </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-test</artifactId>
@@ -70,7 +73,7 @@
     <dependency>
       <groupId> org.springdoc</groupId>
       <artifactId> springdoc-openapi-ui</artifactId>
-      <version>1.6.15</version>
+      <version>${org.springdoc.version}</version>
     </dependency>
 
     <dependency>
@@ -85,6 +88,13 @@
       <version>2.2.8</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${org.junit.jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
     <dependency>
       <groupId>org.mockito</groupId>
@@ -92,7 +102,6 @@
       <version>4.11.0</version>
       <scope>test</scope>
     </dependency>
-
 
     <!-- https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter -->
     <dependency>
@@ -102,6 +111,11 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+      <version>${org.liquibase.version}</version>
+    </dependency>
 
   </dependencies>
 
@@ -127,11 +141,6 @@
           <source>11</source> <!-- depending on your project -->
           <target>11</target> <!-- depending on your project -->
           <annotationProcessorPaths>
-            <path>
-              <groupId>org.mapstruct</groupId>
-              <artifactId>mapstruct-processor</artifactId>
-              <version>${org.mapstruct.version}</version>
-            </path>
             <path>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
