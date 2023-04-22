@@ -15,8 +15,6 @@ import ru.skypro.homework.dto.userDTO.UserDTO;
 import ru.skypro.homework.service.ServiceAds;
 import ru.skypro.homework.service.ServiceUsers;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/users")
 @CrossOrigin(value = "http://localhost:3000")
