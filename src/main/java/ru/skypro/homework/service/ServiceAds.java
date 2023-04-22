@@ -127,9 +127,7 @@ public class ServiceAds {
 
             ads.setAdImage(updateAdImage(createAdsDTO.toAds().getId(),
                             imageFile));
-
             repositoryAds.save(ads);
-
             return AdsDTO.fromDTO(ads);
     }
 

@@ -1,14 +1,4 @@
--- -- liquibase formatted sql
---
--- -- changeset anton:5
--- create table authorities
--- (
---     username VARCHAR(50) NOT NULL,
---     authority VARCHAR(50) NOT NULL,
---     PRIMARY KEY (username),
---     user_id bigint NOT NULL,
---     FOREIGN KEY (user_id) REFERENCES users(id)
--- );.
+
 
 -- Hibernate:
 --
