@@ -187,7 +187,7 @@ public class ControllerAdsTest {
     @Test
     @Transactional
     public void testUpdateAdImage() throws Exception {
-        MvcResult result = mockMvc.perform(patch("/ads/{id}/image", ads.getId())
+        mockMvc.perform(patch("/ads/{id}/image", ads.getId())
                         .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                         .with(request -> {
                             request.addPart(imageFile);

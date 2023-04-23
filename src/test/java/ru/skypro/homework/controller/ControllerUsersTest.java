@@ -124,7 +124,7 @@ public class ControllerUsersTest {
     @Test
     @Transactional
     public void testUpdateUserAvatar() throws Exception {
-        MvcResult result = mockMvc.perform(patch("/users/me/image")
+        mockMvc.perform(patch("/users/me/image")
                         .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                         .with(request -> {
                             request.addPart(imageFile);
