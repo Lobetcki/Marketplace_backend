@@ -90,6 +90,7 @@ public class ServiceUsers {
             throw new RuntimeException(e);
         }
     }
+
     public void deleteUser(String username){
         repositoryUsers.deleteByUsername(username);
     }
