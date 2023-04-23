@@ -22,6 +22,7 @@ import ru.skypro.homework.model.Users;
 import ru.skypro.homework.repositories.RepositoryImage;
 import ru.skypro.homework.repositories.RepositoryUsers;
 import ru.skypro.homework.service.MyUserDetailsManager;
+import ru.skypro.homework.service.ServiceUsers;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -30,13 +31,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
+//@Transactional
 public class ControllerUsersTest {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private RepositoryUsers repositoryUsers;
+    @Autowired
+    private ServiceUsers serviceUsers;
     @Autowired
     private RepositoryImage repositoryImage;
     @Autowired
@@ -64,7 +67,7 @@ public class ControllerUsersTest {
         users.setUsername("test@test.test");
         users.setPassword("test1234");
         users.setEnabled(true);
-        repositoryUsers.save(users);
+        serviceUsers.saveUser(users);
 
         UserDetails userDetails = myUserDetailsManager.loadUserByUsername(users.getUsername());
         auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
@@ -72,7 +75,7 @@ public class ControllerUsersTest {
 
     @AfterEach
     void deleteObject() {
-        repositoryUsers.delete(users);
+        serviceUsers.deleteUser(users.getUsername());
         repositoryImage.delete(image);
     }
 
@@ -127,20 +130,5 @@ public class ControllerUsersTest {
                         .with(authentication(auth)))
                 .andExpect(status().isOk());
     }
-
-//    @Test
-//    public void testGetImage() throws Exception {
-//        image.setBytes("image".getBytes());
-//        repositoryImage.save(image);
-//        users.setUserImage(image);
-//        repositoryUsers.save(users);
-//
-//        mockMvc.perform(get("/users/avatar/{id}", image.getId())
-//                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-//                        .with(authentication(auth)))
-//                .andExpect(status().isOk())
-//                .andExpect(content().bytes(image.getBytes()));
-//    }
-
 }
 

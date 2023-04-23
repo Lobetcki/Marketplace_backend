@@ -58,7 +58,7 @@ public class AuthController {
             }
     )
     public ResponseEntity<?> register(@RequestBody RegisterReq req) {
-        req.setRole(req.getRole() == null ? Role.USER : req.getRole());
+//        req.setRole(req.getRole() == null ? Role.USER : req.getRole());
         if (authService.register(req)) {
             return ResponseEntity.ok().build();
         } else {

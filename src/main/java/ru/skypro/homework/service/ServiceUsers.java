@@ -86,4 +86,12 @@ public class ServiceUsers {
             throw new RuntimeException(e);
         }
     }
+
+    public void saveUser(Users users){
+        repositoryUsers.save(users);
+    }
+    public void deleteUser(String username){
+        repositoryUsers.deleteByUsername(username);
+    }
+
 }

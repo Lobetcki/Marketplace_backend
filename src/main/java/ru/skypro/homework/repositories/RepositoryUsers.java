@@ -13,9 +13,11 @@ public interface RepositoryUsers extends JpaRepository<Users, Long> {
     void passwordUpdate(String newPassword, String username);
 
     // Получить информацию об авторизованном пользователе
-    Users findByUsernameIgnoreCase(String loginEmail);
+    Users findByUsernameIgnoreCase(String username);
 
     // Проверка наличия логина
-    boolean existsByUsername(String loginEmail);
+    boolean existsByUsername(String username);
+
+    void deleteByUsername(String username);
 }
 

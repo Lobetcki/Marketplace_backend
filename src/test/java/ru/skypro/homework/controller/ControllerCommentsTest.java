@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
+//@Transactional
 public class ControllerCommentsTest {
 
     @Autowired
@@ -55,11 +55,11 @@ public class ControllerCommentsTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Authentication auth;
+    private Authentication authentication;
     private Users users = new Users();
     private Ads ads = new Ads();
     private Comments comment = new Comments();
-    private CommentsDTO commentDto = new CommentsDTO();
+    private CommentsDTO commentDTO = new CommentsDTO();
 
     @BeforeEach
     void setUp() {
@@ -75,7 +75,7 @@ public class ControllerCommentsTest {
         UserDetails userDetails = myUserDetailsManager
                 .loadUserByUsername(users.getUsername());
 
-        auth = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
+        authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
                 userDetails.getPassword(),
                 userDetails.getAuthorities());
 
@@ -91,7 +91,7 @@ public class ControllerCommentsTest {
         comment.setUsers(users);
         repositoryComments.save(comment);
 
-        commentDto.setText("Comment test");
+        commentDTO.setText("Comment test");
     }
 
     @AfterEach
@@ -104,7 +104,7 @@ public class ControllerCommentsTest {
     @Test
     public void testGetCommentsByAdId() throws Exception {
         mockMvc.perform(get("/ads/{id}/comments", ads.getId())
-                        .with(authentication(auth)))
+                        .with(authentication(authentication)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.count").isNumber())
@@ -116,18 +116,18 @@ public class ControllerCommentsTest {
     public void testAddComment() throws Exception {
         mockMvc.perform(post("/ads/{id}/comments", ads.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(commentDto))
-                        .with(authentication(auth)))
+                        .content(objectMapper.writeValueAsString(commentDTO))
+                        .with(authentication(authentication)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pk").isNumber())
-                .andExpect(jsonPath("$.text").value(commentDto.getText()))
+                .andExpect(jsonPath("$.text").value(commentDTO.getText()))
                 .andExpect(jsonPath("$.authorFirstName").value(users.getFirstName()));
     }
 
     @Test
     public void testDeleteComment() throws Exception {
         mockMvc.perform(delete("/ads/{adId}/comments/{commentId}", ads.getId(), comment.getId())
-                        .with(authentication(auth)))
+                        .with(authentication(authentication)))
                 .andExpect(status().isOk());
     }
 
@@ -140,7 +140,7 @@ public class ControllerCommentsTest {
         mockMvc.perform(patch("/ads/{adId}/comments/{commentId}", ads.getId(), comment.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(comment))
-                        .with((authentication(auth))))
+                        .with((authentication(authentication))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text").value(comment.getText()));
     }
