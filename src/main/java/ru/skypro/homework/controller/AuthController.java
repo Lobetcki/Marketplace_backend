@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.skypro.homework.dto.LoginReq;
 import ru.skypro.homework.dto.RegisterReq;
-import ru.skypro.homework.Enams.Role;
 import ru.skypro.homework.service.AuthService;
 
 @Slf4j
@@ -32,7 +31,7 @@ public class AuthController {
                             responseCode = "200", description = "OK",
                             content = { @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = LoginReq.class))}),
-                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }

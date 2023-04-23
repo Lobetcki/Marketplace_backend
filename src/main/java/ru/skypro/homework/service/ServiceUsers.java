@@ -75,23 +75,22 @@ public class ServiceUsers {
     public String uploadAvatar(MultipartFile avatarUser,
                                Authentication authentication) {
         try {
-            Users users = repositoryUsers.findByUsernameIgnoreCase(authentication.getName());
-            Image image = repositoryImage.findById(users.getUserImage()
-                    .getId()).orElseThrow(MarketNotFoundException::new);
+            Users users = repositoryUsers
+                    .findByUsernameIgnoreCase(authentication.getName());
+            if (users.getUserImage() != null) {
+                repositoryImage.delete(users.getUserImage());
+            }
+            Image image = new Image();
             image.setBytes(avatarUser.getBytes());
             repositoryImage.save(image);
+            users.setUserImage(image);
             repositoryUsers.save(users);
             return "/ads/me/image/" + image.getId();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-    public void saveUser(Users users){
-        repositoryUsers.save(users);
-    }
     public void deleteUser(String username){
         repositoryUsers.deleteByUsername(username);
     }
-
 }

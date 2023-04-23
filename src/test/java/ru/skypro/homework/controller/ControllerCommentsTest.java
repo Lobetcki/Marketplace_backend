@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -13,9 +14,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.web.servlet.MvcResult;
 import ru.skypro.homework.Enams.Role;
+import ru.skypro.homework.dto.adsDTO.AdsDTO;
 import ru.skypro.homework.dto.commentsDTO.CommentsDTO;
 import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.Comments;
@@ -28,16 +31,14 @@ import ru.skypro.homework.service.MyUserDetailsManager;
 import java.time.Instant;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-//@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@AutoConfigureJsonTesters
 public class ControllerCommentsTest {
 
     @Autowired
@@ -56,10 +57,10 @@ public class ControllerCommentsTest {
     private ObjectMapper objectMapper;
 
     private Authentication authentication;
-    private Users users = new Users();
-    private Ads ads = new Ads();
-    private Comments comment = new Comments();
-    private CommentsDTO commentDTO = new CommentsDTO();
+    private final Users users = new Users();
+    private final Ads ads = new Ads();
+    private final Comments comment = new Comments();
+    private final CommentsDTO commentDTO = new CommentsDTO();
 
     @BeforeEach
     void setUp() {
@@ -114,14 +115,20 @@ public class ControllerCommentsTest {
 
     @Test
     public void testAddComment() throws Exception {
-        mockMvc.perform(post("/ads/{id}/comments", ads.getId())
+        MvcResult result = mockMvc.perform(post("/ads/{id}/comments", ads.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(commentDTO))
                         .with(authentication(authentication)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pk").isNumber())
-                .andExpect(jsonPath("$.text").value(commentDTO.getText()))
-                .andExpect(jsonPath("$.authorFirstName").value(users.getFirstName()));
+                .andExpect(jsonPath("$.text")
+                        .value(commentDTO.getText()))
+                .andExpect(jsonPath("$.authorFirstName")
+                        .value(users.getFirstName()))
+                .andReturn();
+        String responseBody = result.getResponse().getContentAsString();
+        AdsDTO createdAd = objectMapper.readValue(responseBody, AdsDTO.class);
+        repositoryComments.deleteById(createdAd.getPk());
     }
 
     @Test
@@ -133,7 +140,7 @@ public class ControllerCommentsTest {
 
     @Test
     public void testUpdateComment() throws Exception {
-        String newText = "New Text";
+        String newText = "New Test comment";
         comment.setText(newText);
         repositoryComments.save(comment);
 

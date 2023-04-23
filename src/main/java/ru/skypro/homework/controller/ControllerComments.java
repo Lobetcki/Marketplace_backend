@@ -12,6 +12,8 @@ import ru.skypro.homework.dto.commentsDTO.CommentsDTO;
 import ru.skypro.homework.dto.commentsDTO.ResponseWrapperCommentDTO;
 import ru.skypro.homework.service.ServiceComments;
 
+import javax.annotation.security.PermitAll;
+
 @RestController
 @RequestMapping("/ads")
 @CrossOrigin(value = "http://localhost:3000")
@@ -61,7 +63,7 @@ public class ControllerComments {
     )
     @PreAuthorize("commentServiceImpl.getCommentById(#commentId).getAuthor().username" +
             "== authentication.principal.username or hasRole('ROLE_ADMIN')")
-    public ResponseEntity deleteComment(@PathVariable Long adId,
+    public ResponseEntity<?> deleteComment(@PathVariable Long adId,
                                         @PathVariable Long commentId) {
         if (serviceComments.deleteComment(adId, commentId)) {
             return ResponseEntity.ok().build();

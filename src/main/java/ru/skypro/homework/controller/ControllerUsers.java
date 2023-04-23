@@ -51,7 +51,7 @@ public class ControllerUsers {
             responses = {@ApiResponse(responseCode = "200", description = "OK",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = UserDTO.class))}),
-                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }
@@ -70,7 +70,7 @@ public class ControllerUsers {
                             content = {@Content(mediaType = "application/json",
                                     schema = @Schema(implementation = UserDTO.class))}),
                     @ApiResponse(responseCode = "204", description = "No Content"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }
@@ -98,8 +98,7 @@ public class ControllerUsers {
     public ResponseEntity<String> uploadAvatarUser(
             @RequestParam("image") MultipartFile avatarUser,
             Authentication authentication) {
-        return ResponseEntity.ok(serviceUsers.uploadAvatar(
-                avatarUser, authentication));
+        return ResponseEntity.ok(serviceUsers.uploadAvatar(avatarUser, authentication));
     }
 }
 

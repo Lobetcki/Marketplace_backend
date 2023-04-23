@@ -19,10 +19,11 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder encoder;
     private final RepositoryUsers repositoryUsers;
 
-    public AuthServiceImpl(MyUserDetailsManager manager, PasswordEncoder passwordEncoder, RepositoryUsers repositoryUsers) {
+    public AuthServiceImpl(MyUserDetailsManager manager,
+                           PasswordEncoder passwordEncoder,
+                           RepositoryUsers repositoryUsers) {
         this.userDetailsManager = manager;
         this.encoder = passwordEncoder;
-        ;
         this.repositoryUsers = repositoryUsers;
     }
 

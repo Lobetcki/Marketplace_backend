@@ -8,4 +8,8 @@ import java.util.Optional;
 public interface RepositoryImage extends JpaRepository<Image, String> {
 
     Optional<Image> findById(Long id);
+
+    void deleteById(Long id);
+
+    void deleteAllByBytes(byte[] image);
 }

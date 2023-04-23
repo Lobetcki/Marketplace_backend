@@ -19,7 +19,6 @@ import ru.skypro.homework.dto.userDTO.UserDTO;
 import ru.skypro.homework.service.ServiceAds;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/ads")
@@ -65,6 +64,7 @@ public class ControllerAds {
         return ResponseEntity.ok(serviceAds.getAdsByTitle(text));
     }
 
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "Добавить объявление", tags = "Объявления",
             responses = {
@@ -72,20 +72,19 @@ public class ControllerAds {
                             responseCode = "201", description = "Created",
                             content = {@Content(mediaType = "application/json",
                                     schema = @Schema(implementation = CreateAdsDTO.class))}),
-                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }
     )
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdsDTO> createAd(@RequestPart("properties") CreateAdsDTO createAdsDTO,
                                            @Valid
                                            @RequestPart("image") MultipartFile imageFile,
-                                           Authentication authentication) throws IOException {
+                                           Authentication authentication) {
         AdsDTO adsDTO = serviceAds.createAd(createAdsDTO, imageFile, authentication);
         return ResponseEntity.status(HttpStatus.CREATED).body(adsDTO);
     }
-
+    @GetMapping("/{id}")
     @Operation(
             summary = "Получить информацию об объявлении", tags = "Объявления",
             responses = {
@@ -96,7 +95,6 @@ public class ControllerAds {
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }
     )
-    @GetMapping("/{id}")
     public ResponseEntity<AdsFullDTO> getAdById(@PathVariable Long id) {
         AdsFullDTO adFullDTO = serviceAds.getAdById(id);
         if (adFullDTO == null) {
@@ -105,19 +103,20 @@ public class ControllerAds {
         return ResponseEntity.ok(adFullDTO);
     }
 
+    @DeleteMapping("/{id}")
     @Operation(
             summary = "Удалить объявление", tags = "Объявления",
             responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content),
                     @ApiResponse(responseCode = "204", description = "No Content", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             }
     )
     @PreAuthorize("adsServiceImpl.getAdsById(#id).getEmail()" +
             "== authentication.principal.username or hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAd(@PathVariable Long id) {
+    public ResponseEntity<?> deleteAd(@PathVariable Long id,
+                                      Authentication authentication) {
         serviceAds.deleteAd(id);
         return ResponseEntity.noContent().build();
     }
@@ -130,7 +129,7 @@ public class ControllerAds {
                             responseCode = "200", description = "OK",
                             content = {@Content(mediaType = "application/json",
                                     schema = @Schema(implementation = CreateAdsDTO.class))}),
-                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content)
             }
@@ -155,7 +154,7 @@ public class ControllerAds {
                             responseCode = "200", description = "OK",
                             content = {@Content(mediaType = "application/json",
                                     schema = @Schema(implementation = ResponseWrapperAdsDTO.class))}),
-                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content), //где получить?
+                    @ApiResponse(responseCode = "401", description = "Unauthorised", content = @Content),
                     @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
             }
     )
@@ -166,6 +165,7 @@ public class ControllerAds {
         return ResponseEntity.ok(adsDTOs);
     }
 
+    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "Обновить картинку объявления",tags = "Объявления",
             responses = {
@@ -178,7 +178,6 @@ public class ControllerAds {
     )
     @PreAuthorize("adsServiceImpl.getAdsById(#id).getEmail()" +
             "== authentication.principal.username or hasRole('ROLE_ADMIN')")
-    @PatchMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<byte[]> updateAdImage(@PathVariable("id") Long adid,
                                                 @RequestParam("image") MultipartFile imageFile) {
 
@@ -186,9 +185,9 @@ public class ControllerAds {
     }
 
     // Вернуть аватарку пользователя или картинку объявления
-    @Operation(hidden = true)
     @GetMapping(value = "/me/image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
-    public byte[] getImage(@PathVariable("id") Long id) throws IOException {
+    @Operation(hidden = true)
+    public byte[] getImage(@PathVariable("id") Long id) {
         return serviceAds.getImage(id);
     }
 

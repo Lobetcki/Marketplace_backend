@@ -16,4 +16,5 @@ public interface RepositoryAds extends JpaRepository<Ads, Long> {
     @Modifying
     @Query(value = "UPDATE ads a SET ad_image_id = ?2 WHERE a.id = ?1", nativeQuery = true)
     void updateAdImage(Long id, Long imageId);
+
 }

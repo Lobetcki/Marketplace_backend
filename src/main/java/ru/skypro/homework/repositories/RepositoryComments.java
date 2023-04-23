@@ -10,6 +10,4 @@ public interface RepositoryComments extends JpaRepository<Comments, Long> {
     List<Comments> findAllByAdsId(Long id);
 
     Optional<Comments> findByIdAndAdsId(Long id, Long adId);
-
-    Comments findByText(String text);
 }

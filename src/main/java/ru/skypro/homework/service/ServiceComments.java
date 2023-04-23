@@ -70,7 +70,6 @@ public class ServiceComments {
         comments.setText(commentDTO.getText());
         commentDTO = CommentsDTO.fromCommentsDTO(comments);
         repositoryComments.save(comments);
-        System.out.println(commentDTO);
         return commentDTO;
     }
 }
