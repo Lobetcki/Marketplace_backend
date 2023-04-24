@@ -20,7 +20,7 @@ public class WebSecurityConfig {
             "/login",
             "/register",
             "/ads",
-            "/ads/image/**"
+            "/ads/me/image/**"
     };
 
     @Bean

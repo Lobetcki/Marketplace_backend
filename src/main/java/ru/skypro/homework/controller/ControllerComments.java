@@ -12,8 +12,6 @@ import ru.skypro.homework.dto.commentsDTO.CommentsDTO;
 import ru.skypro.homework.dto.commentsDTO.ResponseWrapperCommentDTO;
 import ru.skypro.homework.service.ServiceComments;
 
-import javax.annotation.security.PermitAll;
-
 @RestController
 @RequestMapping("/ads")
 @CrossOrigin(value = "http://localhost:3000")

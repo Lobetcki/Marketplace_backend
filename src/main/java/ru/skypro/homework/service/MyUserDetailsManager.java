@@ -18,17 +18,14 @@ public class MyUserDetailsManager implements UserDetailsManager {
 
     @Override
     public void createUser(UserDetails user) {
-
     }
 
     @Override
     public void updateUser(UserDetails user) {
-
     }
 
     @Override
     public void deleteUser(String username) {
-
     }
 
     @Override

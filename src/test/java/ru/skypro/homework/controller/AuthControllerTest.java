@@ -54,5 +54,4 @@ public class AuthControllerTest {
 
         serviceUsers.deleteUser(registerReq.getUsername());
     }
-
 }
