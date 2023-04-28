@@ -8,7 +8,7 @@ create table users
     username varchar(50) NOT NULL UNIQUE,
     first_name      varchar(50),
     last_name       varchar(50),
-    password        varchar(50) NOT NULL,
+    password        varchar(255) NOT NULL,
     phone           varchar(50),
     role            varchar(50),
     enabled         boolean,
