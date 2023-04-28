@@ -39,7 +39,7 @@ public class MyUserDetailsManager implements UserDetailsManager {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username)
+    public RegisterReq loadUserByUsername(String username)
             throws UsernameNotFoundException {
 
         return RegisterReq.fromRegisterReq(
